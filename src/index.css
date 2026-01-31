@@ -2,95 +2,63 @@
 @tailwind components;
 @tailwind utilities;
 
-/* Definition of the design system. All colors, gradients, fonts, etc should be defined here. 
-All colors MUST be HSL.
-*/
+/* FutoraJobs Lite Design System - Futuristic Glassmorphism */
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 222.2 84% 4.9%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 222.2 84% 4.9%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 222.2 84% 4.9%;
-
-    --primary: 222.2 47.4% 11.2%;
-    --primary-foreground: 210 40% 98%;
-
-    --secondary: 210 40% 96.1%;
-    --secondary-foreground: 222.2 47.4% 11.2%;
-
-    --muted: 210 40% 96.1%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 222.2 47.4% 11.2%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 210 40% 98%;
-
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
-
-    --radius: 0.5rem;
-
-    --sidebar-background: 0 0% 98%;
-
-    --sidebar-foreground: 240 5.3% 26.1%;
-
-    --sidebar-primary: 240 5.9% 10%;
-
-    --sidebar-primary-foreground: 0 0% 98%;
-
-    --sidebar-accent: 240 4.8% 95.9%;
-
-    --sidebar-accent-foreground: 240 5.9% 10%;
-
-    --sidebar-border: 220 13% 91%;
-
-    --sidebar-ring: 217.2 91.2% 59.8%;
-  }
-
-  .dark {
-    --background: 222.2 84% 4.9%;
+    /* Core dark space palette */
+    --background: 230 25% 5%;
     --foreground: 210 40% 98%;
 
-    --card: 222.2 84% 4.9%;
+    /* Glass cards */
+    --card: 230 20% 10%;
     --card-foreground: 210 40% 98%;
 
-    --popover: 222.2 84% 4.9%;
+    --popover: 230 20% 8%;
     --popover-foreground: 210 40% 98%;
 
-    --primary: 210 40% 98%;
-    --primary-foreground: 222.2 47.4% 11.2%;
+    /* Cyan/Teal primary - futuristic accent */
+    --primary: 185 80% 50%;
+    --primary-foreground: 230 25% 5%;
 
-    --secondary: 217.2 32.6% 17.5%;
-    --secondary-foreground: 210 40% 98%;
+    /* Secondary - muted glass */
+    --secondary: 230 15% 15%;
+    --secondary-foreground: 210 40% 90%;
 
-    --muted: 217.2 32.6% 17.5%;
-    --muted-foreground: 215 20.2% 65.1%;
+    /* Muted states */
+    --muted: 230 15% 20%;
+    --muted-foreground: 215 20% 55%;
 
-    --accent: 217.2 32.6% 17.5%;
-    --accent-foreground: 210 40% 98%;
+    /* Accent - glowing cyan */
+    --accent: 185 70% 45%;
+    --accent-foreground: 230 25% 5%;
 
-    --destructive: 0 62.8% 30.6%;
+    --destructive: 0 72% 51%;
     --destructive-foreground: 210 40% 98%;
 
-    --border: 217.2 32.6% 17.5%;
-    --input: 217.2 32.6% 17.5%;
-    --ring: 212.7 26.8% 83.9%;
-    --sidebar-background: 240 5.9% 10%;
-    --sidebar-foreground: 240 4.8% 95.9%;
-    --sidebar-primary: 224.3 76.3% 48%;
-    --sidebar-primary-foreground: 0 0% 100%;
-    --sidebar-accent: 240 3.7% 15.9%;
-    --sidebar-accent-foreground: 240 4.8% 95.9%;
-    --sidebar-border: 240 3.7% 15.9%;
-    --sidebar-ring: 217.2 91.2% 59.8%;
+    --border: 230 15% 20%;
+    --input: 230 15% 15%;
+    --ring: 185 80% 50%;
+
+    --radius: 1rem;
+
+    /* Custom gradients */
+    --gradient-primary: linear-gradient(135deg, hsl(185 80% 50%), hsl(200 80% 40%));
+    --gradient-glow: radial-gradient(ellipse at center, hsl(185 80% 50% / 0.15), transparent 70%);
+    --gradient-card: linear-gradient(135deg, hsl(230 20% 12% / 0.8), hsl(230 20% 8% / 0.9));
+    
+    /* Glass effect */
+    --glass-bg: hsl(230 20% 10% / 0.6);
+    --glass-border: hsl(230 15% 25% / 0.5);
+
+    --sidebar-background: 230 20% 8%;
+    --sidebar-foreground: 210 40% 90%;
+    --sidebar-primary: 185 80% 50%;
+    --sidebar-primary-foreground: 230 25% 5%;
+    --sidebar-accent: 230 15% 15%;
+    --sidebar-accent-foreground: 210 40% 90%;
+    --sidebar-border: 230 15% 20%;
+    --sidebar-ring: 185 80% 50%;
   }
 }
 
@@ -100,6 +68,112 @@ All colors MUST be HSL.
   }
 
   body {
-    @apply bg-background text-foreground;
+    @apply bg-background text-foreground antialiased;
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Smooth scrolling */
+  html {
+    scroll-behavior: smooth;
+  }
+}
+
+@layer components {
+  /* Glassmorphism card */
+  .glass-card {
+    @apply relative overflow-hidden rounded-2xl border border-glass-border;
+    background: var(--glass-bg);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+  }
+
+  .glass-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, hsl(185 80% 50% / 0.3), transparent);
+  }
+
+  /* Glow effect */
+  .glow {
+    box-shadow: 0 0 40px hsl(185 80% 50% / 0.15),
+                0 0 80px hsl(185 80% 50% / 0.1);
+  }
+
+  .glow-text {
+    text-shadow: 0 0 30px hsl(185 80% 50% / 0.5);
+  }
+
+  /* Gradient text */
+  .gradient-text {
+    @apply bg-clip-text text-transparent;
+    background-image: var(--gradient-primary);
+  }
+
+  /* Skill chip */
+  .skill-chip {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full;
+    background: hsl(185 80% 50% / 0.1);
+    color: hsl(185 80% 60%);
+    border: 1px solid hsl(185 80% 50% / 0.2);
+  }
+
+  /* Vision tag */
+  .vision-tag {
+    @apply inline-flex items-center px-3 py-1 text-xs font-medium rounded-full;
+    background: hsl(270 60% 50% / 0.1);
+    color: hsl(270 60% 70%);
+    border: 1px solid hsl(270 60% 50% / 0.2);
+  }
+
+  /* Step indicator */
+  .step-active {
+    @apply relative;
+  }
+
+  .step-active::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    right: 0;
+    height: 2px;
+    background: var(--gradient-primary);
+    border-radius: 1px;
+  }
+}
+
+@layer utilities {
+  /* Noise texture overlay */
+  .noise-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    opacity: 0.03;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+  }
+
+  /* Animated gradient background */
+  .animated-bg {
+    background: 
+      radial-gradient(ellipse 80% 50% at 50% -20%, hsl(185 80% 50% / 0.15), transparent),
+      radial-gradient(ellipse 60% 40% at 80% 50%, hsl(270 60% 50% / 0.1), transparent),
+      hsl(var(--background));
+  }
+
+  /* Hover lift effect */
+  .hover-lift {
+    @apply transition-all duration-300 ease-out;
+  }
+
+  .hover-lift:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 20px 40px hsl(185 80% 50% / 0.1);
   }
 }
