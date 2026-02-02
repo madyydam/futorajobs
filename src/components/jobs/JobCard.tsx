@@ -1,9 +1,8 @@
-import { GlassCard } from "@/components/ui/GlassCard";
-import { SkillChip } from "@/components/ui/SkillChip";
-import { VisionTag } from "@/components/ui/VisionTag";
+import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, ArrowRight } from "lucide-react";
 import { Link } from "react-router-dom";
+import { motion } from "framer-motion";
 
 export interface Job {
   id: string;
@@ -24,11 +23,11 @@ interface JobCardProps {
 
 export function JobCard({ job, index = 0 }: JobCardProps) {
   return (
-    <GlassCard
-      className="group cursor-pointer"
+    <motion.div
+      className="clean-card p-6 group cursor-pointer hover-lift"
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
-      transition={{ duration: 0.4, delay: index * 0.1 }}
+      transition={{ duration: 0.4, delay: index * 0.05 }}
     >
       <div className="flex flex-col gap-4">
         {/* Header */}
@@ -39,15 +38,15 @@ export function JobCard({ job, index = 0 }: JobCardProps) {
             </h3>
             <p className="text-sm text-muted-foreground mt-1">{job.company}</p>
           </div>
-          <div className="h-12 w-12 rounded-xl bg-gradient-primary/20 flex items-center justify-center shrink-0">
-            <span className="text-lg font-bold gradient-text">
+          <div className="h-12 w-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+            <span className="text-lg font-bold text-primary">
               {job.company.charAt(0)}
             </span>
           </div>
         </div>
 
         {/* Vision */}
-        <p className="text-sm text-secondary-foreground leading-relaxed">
+        <p className="text-sm text-muted-foreground leading-relaxed">
           {job.vision}
         </p>
 
@@ -55,7 +54,7 @@ export function JobCard({ job, index = 0 }: JobCardProps) {
         {job.visionTags && job.visionTags.length > 0 && (
           <div className="flex flex-wrap gap-2">
             {job.visionTags.map((tag) => (
-              <VisionTag key={tag}>{tag}</VisionTag>
+              <span key={tag} className="vision-tag">{tag}</span>
             ))}
           </div>
         )}
@@ -63,12 +62,12 @@ export function JobCard({ job, index = 0 }: JobCardProps) {
         {/* Skills */}
         <div className="flex flex-wrap gap-2">
           {job.skills.map((skill) => (
-            <SkillChip key={skill}>{skill}</SkillChip>
+            <span key={skill} className="skill-chip">{skill}</span>
           ))}
         </div>
 
         {/* Meta & CTA */}
-        <div className="flex items-center justify-between pt-2 border-t border-border/50">
+        <div className="flex items-center justify-between pt-4 border-t border-border">
           <div className="flex items-center gap-4 text-xs text-muted-foreground">
             <span className="flex items-center gap-1">
               <MapPin className="h-3 w-3" />
@@ -83,7 +82,7 @@ export function JobCard({ job, index = 0 }: JobCardProps) {
           <Link to={`/apply/${job.id}`}>
             <Button 
               size="sm" 
-              className="bg-gradient-primary text-primary-foreground hover:opacity-90 transition-opacity group/btn"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 transition-colors group/btn"
             >
               Apply
               <ArrowRight className="h-4 w-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />
@@ -91,6 +90,6 @@ export function JobCard({ job, index = 0 }: JobCardProps) {
           </Link>
         </div>
       </div>
-    </GlassCard>
+    </motion.div>
   );
 }
