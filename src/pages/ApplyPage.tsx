@@ -1,5 +1,4 @@
 import { Layout } from "@/components/layout/Layout";
-import { GlassCard } from "@/components/ui/GlassCard";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -9,7 +8,7 @@ import { ArrowLeft, ArrowRight, Check, Briefcase, Link2, Clock } from "lucide-re
 import { motion, AnimatePresence } from "framer-motion";
 import { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { mockJobs } from "@/data/jobs";
+import { mockJobs, mockInternships } from "@/data/jobs";
 import { cn } from "@/lib/utils";
 
 const steps = [
@@ -31,7 +30,11 @@ const ApplyPage = () => {
   });
   const [submitted, setSubmitted] = useState(false);
 
+  // Find job or internship
   const job = mockJobs.find((j) => j.id === jobId);
+  const internship = mockInternships.find((i) => i.id === jobId);
+  const listing = job || internship;
+  const isInternship = !!internship;
 
   const handleNext = () => {
     if (currentStep < 3) {
@@ -60,12 +63,14 @@ const ApplyPage = () => {
     }
   };
 
-  if (!job) {
+  if (!listing) {
     return (
       <Layout>
-        <div className="container max-w-2xl px-4 text-center py-20">
-          <h1 className="text-2xl font-bold mb-4">Job not found</h1>
-          <Button onClick={() => navigate("/jobs")}>Back to Jobs</Button>
+        <div className="max-w-2xl mx-auto text-center py-20">
+          <h1 className="text-2xl font-bold text-foreground mb-4">Role not found</h1>
+          <Button onClick={() => navigate("/jobs")} className="bg-primary text-primary-foreground">
+            Back to Jobs
+          </Button>
         </div>
       </Layout>
     );
@@ -74,30 +79,30 @@ const ApplyPage = () => {
   if (submitted) {
     return (
       <Layout>
-        <div className="container max-w-2xl px-4 py-10">
+        <div className="max-w-2xl mx-auto">
           <motion.div
             initial={{ opacity: 0, scale: 0.95 }}
             animate={{ opacity: 1, scale: 1 }}
           >
-            <GlassCard glow className="text-center py-16 px-8">
-              <div className="w-20 h-20 rounded-full bg-gradient-primary/20 flex items-center justify-center mx-auto mb-6">
+            <div className="clean-card text-center py-16 px-8">
+              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
                 <Check className="h-10 w-10 text-primary" />
               </div>
-              <h1 className="text-2xl md:text-3xl font-bold mb-4">
+              <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
                 Application Submitted! 🚀
               </h1>
               <p className="text-muted-foreground max-w-md mx-auto mb-8">
-                Your application for <span className="text-foreground font-medium">{job.title}</span> at{" "}
-                <span className="text-foreground font-medium">{job.company}</span> has been received.
+                Your application for <span className="text-foreground font-medium">{listing.title}</span> at{" "}
+                <span className="text-foreground font-medium">{listing.company}</span> has been received.
                 We'll get back to you soon.
               </p>
               <Button
-                onClick={() => navigate("/jobs")}
-                className="bg-gradient-primary text-primary-foreground hover:opacity-90"
+                onClick={() => navigate(isInternship ? "/internships" : "/jobs")}
+                className="bg-primary text-primary-foreground hover:bg-primary/90"
               >
                 Explore More Roles
               </Button>
-            </GlassCard>
+            </div>
           </motion.div>
         </div>
       </Layout>
@@ -106,7 +111,7 @@ const ApplyPage = () => {
 
   return (
     <Layout>
-      <div className="container max-w-2xl px-4 py-10">
+      <div className="max-w-2xl mx-auto">
         {/* Job Info */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
@@ -114,8 +119,8 @@ const ApplyPage = () => {
           className="text-center mb-8"
         >
           <p className="text-sm text-muted-foreground mb-2">Applying for</p>
-          <h1 className="text-2xl font-bold mb-1">{job.title}</h1>
-          <p className="text-muted-foreground">{job.company}</p>
+          <h1 className="text-2xl font-bold text-foreground mb-1">{listing.title}</h1>
+          <p className="text-muted-foreground">{listing.company}</p>
         </motion.div>
 
         {/* Step Indicator */}
@@ -134,8 +139,8 @@ const ApplyPage = () => {
                 key={step.id}
                 className={cn(
                   "flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all",
-                  isActive && "bg-primary/20 text-primary",
-                  isCompleted && "bg-primary/10 text-primary/70",
+                  isActive && "bg-primary/10 text-primary",
+                  isCompleted && "bg-primary/5 text-primary/70",
                   !isActive && !isCompleted && "text-muted-foreground"
                 )}
               >
@@ -151,7 +156,7 @@ const ApplyPage = () => {
         </motion.div>
 
         {/* Form Steps */}
-        <GlassCard className="p-8">
+        <div className="clean-card p-8">
           <AnimatePresence mode="wait">
             {currentStep === 1 && (
               <motion.div
@@ -161,7 +166,7 @@ const ApplyPage = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-xl font-semibold mb-2">Your Intent</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-2">Your Intent</h2>
                 <p className="text-sm text-muted-foreground mb-6">
                   Why do you want to build this future? What draws you to this role?
                 </p>
@@ -171,7 +176,7 @@ const ApplyPage = () => {
                   onChange={(e) =>
                     setFormData({ ...formData, intent: e.target.value })
                   }
-                  className="min-h-[180px] bg-secondary/30 border-border/50 focus:border-primary/50"
+                  className="min-h-[180px] bg-card border-border"
                 />
                 <p className="text-xs text-muted-foreground mt-2">
                   Minimum 20 characters. Be authentic.
@@ -187,7 +192,7 @@ const ApplyPage = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-xl font-semibold mb-2">Proof of Work</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-2">Proof of Work</h2>
                 <p className="text-sm text-muted-foreground mb-6">
                   Show us what you've built. Links speak louder than resumes.
                 </p>
@@ -203,7 +208,7 @@ const ApplyPage = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, portfolio: e.target.value })
                       }
-                      className="mt-2 bg-secondary/30 border-border/50 focus:border-primary/50"
+                      className="mt-2 bg-card border-border"
                     />
                   </div>
                   <div>
@@ -217,7 +222,7 @@ const ApplyPage = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, github: e.target.value })
                       }
-                      className="mt-2 bg-secondary/30 border-border/50 focus:border-primary/50"
+                      className="mt-2 bg-card border-border"
                     />
                   </div>
                   <div>
@@ -231,7 +236,7 @@ const ApplyPage = () => {
                       onChange={(e) =>
                         setFormData({ ...formData, otherLink: e.target.value })
                       }
-                      className="mt-2 bg-secondary/30 border-border/50 focus:border-primary/50"
+                      className="mt-2 bg-card border-border"
                     />
                   </div>
                 </div>
@@ -246,7 +251,7 @@ const ApplyPage = () => {
                 exit={{ opacity: 0, x: -20 }}
                 transition={{ duration: 0.3 }}
               >
-                <h2 className="text-xl font-semibold mb-2">Availability</h2>
+                <h2 className="text-xl font-semibold text-foreground mb-2">Availability</h2>
                 <p className="text-sm text-muted-foreground mb-6">
                   How much time can you commit to this role?
                 </p>
@@ -269,13 +274,13 @@ const ApplyPage = () => {
                       className={cn(
                         "flex items-center gap-4 p-4 rounded-xl border cursor-pointer transition-all",
                         formData.availability === option.value
-                          ? "border-primary/50 bg-primary/10"
-                          : "border-border/50 hover:border-border"
+                          ? "border-primary bg-primary/5"
+                          : "border-border hover:border-muted-foreground"
                       )}
                     >
                       <RadioGroupItem value={option.value} id={option.value} />
                       <div>
-                        <p className="font-medium">{option.label}</p>
+                        <p className="font-medium text-foreground">{option.label}</p>
                         <p className="text-xs text-muted-foreground">{option.desc}</p>
                       </div>
                     </Label>
@@ -286,7 +291,7 @@ const ApplyPage = () => {
           </AnimatePresence>
 
           {/* Navigation */}
-          <div className="flex justify-between mt-8 pt-6 border-t border-border/50">
+          <div className="flex justify-between mt-8 pt-6 border-t border-border">
             <Button
               variant="ghost"
               onClick={handleBack}
@@ -299,13 +304,13 @@ const ApplyPage = () => {
             <Button
               onClick={handleNext}
               disabled={!canProceed()}
-              className="bg-gradient-primary text-primary-foreground hover:opacity-90 disabled:opacity-50"
+              className="bg-primary text-primary-foreground hover:bg-primary/90 disabled:opacity-50"
             >
               {currentStep === 3 ? "Submit Application" : "Continue"}
               <ArrowRight className="h-4 w-4 ml-2" />
             </Button>
           </div>
-        </GlassCard>
+        </div>
       </div>
     </Layout>
   );

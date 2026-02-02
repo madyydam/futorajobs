@@ -1,32 +1,32 @@
 import { Layout } from "@/components/layout/Layout";
-import { JobCard } from "@/components/jobs/JobCard";
-import { mockJobs } from "@/data/jobs";
+import { InternshipCard } from "@/components/internships/InternshipCard";
+import { mockInternships } from "@/data/jobs";
 import { Input } from "@/components/ui/input";
-import { Search } from "lucide-react";
+import { Search, Filter } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { cn } from "@/lib/utils";
 
-const filters = ["All", "Remote", "Full-time", "Part-time", "Hybrid"];
+const filters = ["All", "Remote", "Paid", "3 months", "6 months"];
 
-const JobsPage = () => {
+const InternshipsPage = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [activeFilter, setActiveFilter] = useState("All");
 
-  const filteredJobs = mockJobs.filter((job) => {
+  const filteredInternships = mockInternships.filter((internship) => {
     const matchesSearch =
-      job.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      job.skills.some((skill) =>
+      internship.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      internship.company.toLowerCase().includes(searchQuery.toLowerCase()) ||
+      internship.skills.some((skill) =>
         skill.toLowerCase().includes(searchQuery.toLowerCase())
       );
 
     const matchesFilter =
       activeFilter === "All" ||
-      (activeFilter === "Remote" && job.location === "Remote") ||
-      (activeFilter === "Full-time" && job.type === "Full-time") ||
-      (activeFilter === "Part-time" && job.type === "Part-time") ||
-      (activeFilter === "Hybrid" && job.location === "Hybrid");
+      (activeFilter === "Remote" && internship.location === "Remote") ||
+      (activeFilter === "Paid" && internship.isPaid) ||
+      (activeFilter === "3 months" && internship.duration === "3 months") ||
+      (activeFilter === "6 months" && internship.duration === "6 months");
 
     return matchesSearch && matchesFilter;
   });
@@ -41,10 +41,10 @@ const JobsPage = () => {
           className="mb-8"
         >
           <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-2">
-            Jobs
+            Internships
           </h1>
           <p className="text-muted-foreground">
-            Find your next mission. Build something that matters.
+            Kickstart your career with meaningful internships at top startups.
           </p>
         </motion.div>
 
@@ -59,7 +59,7 @@ const JobsPage = () => {
           <div className="relative max-w-md">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
             <Input
-              placeholder="Search roles, skills, or companies..."
+              placeholder="Search internships..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
               className="pl-10 bg-card border-border"
@@ -85,21 +85,21 @@ const JobsPage = () => {
           </div>
         </motion.div>
 
-        {/* Jobs Grid */}
+        {/* Internships Grid */}
         <div className="grid md:grid-cols-2 gap-4">
-          {filteredJobs.map((job, index) => (
-            <JobCard key={job.id} job={job} index={index} />
+          {filteredInternships.map((internship, index) => (
+            <InternshipCard key={internship.id} internship={internship} index={index} />
           ))}
         </div>
 
-        {filteredJobs.length === 0 && (
+        {filteredInternships.length === 0 && (
           <motion.div
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             className="text-center py-20"
           >
             <p className="text-muted-foreground">
-              No jobs found matching your criteria.
+              No internships found matching your criteria.
             </p>
           </motion.div>
         )}
@@ -108,4 +108,4 @@ const JobsPage = () => {
   );
 };
 
-export default JobsPage;
+export default InternshipsPage;
