@@ -1,7 +1,7 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import { 
-  Home, 
+  BookOpen, 
   Briefcase, 
   GraduationCap, 
   PlusCircle, 
@@ -15,7 +15,7 @@ import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 
 const navItems = [
-  { path: "/", label: "Home", icon: Home },
+  { path: "/", label: "Learn", icon: BookOpen },
   { path: "/jobs", label: "Jobs", icon: Briefcase },
   { path: "/internships", label: "Internships", icon: GraduationCap },
   { path: "/post", label: "Post", icon: PlusCircle },
