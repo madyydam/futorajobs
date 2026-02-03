@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Briefcase, GraduationCap, Sparkles, Users, Zap } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
+import { CoursesSection } from "@/components/home/CoursesSection";
 
 const features = [
   {
@@ -121,6 +122,9 @@ const Index = () => {
             </motion.div>
           </div>
         </section>
+
+        {/* Courses Section */}
+        <CoursesSection />
 
         {/* Features Section */}
         <section className="py-12">
