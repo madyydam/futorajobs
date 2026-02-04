@@ -9,6 +9,7 @@ import InternshipsPage from "./pages/InternshipsPage";
 import ApplyPage from "./pages/ApplyPage";
 import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
+import CourseDetailPage from "./pages/CourseDetailPage";
 import NotFound from "./pages/NotFound";
 
 const queryClient = new QueryClient();
@@ -21,6 +22,7 @@ const App = () => (
       <BrowserRouter>
         <Routes>
           <Route path="/" element={<Index />} />
+          <Route path="/courses/:courseId" element={<CourseDetailPage />} />
           <Route path="/jobs" element={<JobsPage />} />
           <Route path="/internships" element={<InternshipsPage />} />
           <Route path="/apply/:jobId" element={<ApplyPage />} />
