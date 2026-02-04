@@ -1,6 +1,7 @@
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
-import { ArrowRight, Briefcase, GraduationCap, Sparkles, BookOpen, Target } from "lucide-react";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { ArrowRight, Briefcase, GraduationCap, Sparkles, BookOpen, Target, Hammer } from "lucide-react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CoursesSection } from "@/components/home/CoursesSection";
@@ -59,14 +60,46 @@ const Index = () => {
         {/* Learning Modes Section */}
         <LearningModesSection />
 
-        {/* Career Tracks Section */}
-        <CareerTracksSection />
+        {/* Tabbed Content Section */}
+        <section className="py-8">
+          <Tabs defaultValue="courses" className="w-full">
+            <TabsList className="w-full justify-start bg-muted/50 p-1 rounded-lg mb-6">
+              <TabsTrigger 
+                value="courses" 
+                className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              >
+                <BookOpen className="h-4 w-4" />
+                Courses
+              </TabsTrigger>
+              <TabsTrigger 
+                value="tracks" 
+                className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              >
+                <Target className="h-4 w-4" />
+                Career Tracks
+              </TabsTrigger>
+              <TabsTrigger 
+                value="projects" 
+                className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
+              >
+                <Hammer className="h-4 w-4" />
+                Projects
+              </TabsTrigger>
+            </TabsList>
 
-        {/* Courses Section */}
-        <CoursesSection />
+            <TabsContent value="courses" className="mt-0">
+              <CoursesSection />
+            </TabsContent>
 
-        {/* Projects Section */}
-        <ProjectsSection />
+            <TabsContent value="tracks" className="mt-0">
+              <CareerTracksSection />
+            </TabsContent>
+
+            <TabsContent value="projects" className="mt-0">
+              <ProjectsSection />
+            </TabsContent>
+          </Tabs>
+        </section>
 
         {/* Quick Links to Jobs & Internships */}
         <section className="py-12">
