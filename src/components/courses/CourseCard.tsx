@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Clock, Briefcase, GraduationCap, Sparkles, Code, Palette, TrendingUp } from "lucide-react";
 import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
 
 interface CourseCardProps {
   course: Course;
@@ -30,8 +31,13 @@ const levelColors = {
 };
 
 export function CourseCard({ course, index = 0 }: CourseCardProps) {
+  const navigate = useNavigate();
   const CategoryIcon = categoryIcons[course.category];
   const OutcomeIcon = course.outcome === "Job-ready" ? Briefcase : GraduationCap;
+
+  const handleClick = () => {
+    navigate(`/courses/${course.id}`);
+  };
 
   return (
     <motion.div
@@ -40,7 +46,10 @@ export function CourseCard({ course, index = 0 }: CourseCardProps) {
       viewport={{ once: true }}
       transition={{ duration: 0.4, delay: index * 0.1 }}
     >
-      <div className="clean-card p-6 h-full hover-lift cursor-pointer group flex flex-col">
+      <div 
+        onClick={handleClick}
+        className="clean-card p-6 h-full hover-lift cursor-pointer group flex flex-col"
+      >
         {/* Top Row: Category & Level */}
         <div className="flex items-center justify-between mb-4">
           <div className={`inline-flex items-center gap-1.5 px-2.5 py-1 text-xs font-medium rounded-full border ${categoryColors[course.category]}`}>
