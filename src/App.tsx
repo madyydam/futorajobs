@@ -11,6 +11,8 @@ import PostPage from "./pages/PostPage";
 import ProfilePage from "./pages/ProfilePage";
 import CourseDetailPage from "./pages/CourseDetailPage";
 import NotFound from "./pages/NotFound";
+ import AuthPage from "./pages/AuthPage";
+ import CareerPathPage from "./pages/CareerPathPage";
 
 const queryClient = new QueryClient();
 
@@ -23,9 +25,13 @@ const App = () => (
         <Routes>
           <Route path="/" element={<Index />} />
           <Route path="/courses/:courseId" element={<CourseDetailPage />} />
+           <Route path="/career-path/:pathId" element={<CareerPathPage />} />
           <Route path="/jobs" element={<JobsPage />} />
           <Route path="/internships" element={<InternshipsPage />} />
           <Route path="/apply/:jobId" element={<ApplyPage />} />
+           <Route path="/apply/internship/:internshipId" element={<ApplyPage />} />
+           <Route path="/apply/job/:jobId" element={<ApplyPage />} />
+           <Route path="/auth" element={<AuthPage />} />
           <Route path="/post" element={<PostPage />} />
           <Route path="/post-job" element={<PostPage />} />
           <Route path="/profile" element={<ProfilePage />} />
