@@ -2,14 +2,24 @@ import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { ArrowRight, Briefcase, GraduationCap, Sparkles, BookOpen, Target, Hammer } from "lucide-react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 import { CoursesSection } from "@/components/home/CoursesSection";
 import { CareerTracksSection } from "@/components/home/CareerTracksSection";
 import { ProjectsSection } from "@/components/home/ProjectsSection";
 import { LearningModesSection } from "@/components/home/LearningModesSection";
+import { useAuth } from "@/hooks/useAuth";
 
 const Index = () => {
+  const navigate = useNavigate();
+  const { user } = useAuth();
+  const scrollToSection = (sectionId: string) => {
+    const element = document.getElementById(sectionId);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  };
+
   return (
     <Layout>
       <div className="max-w-5xl mx-auto">
@@ -25,30 +35,32 @@ const Index = () => {
               <Sparkles className="h-4 w-4" />
               Learn → Build → Get Hired
             </div>
-            
+
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight text-foreground mb-6">
-              Learn. Build.
+              Jobs & Internships in
               <br />
-              <span className="gradient-text">Get Hired.</span>
+              <span className="gradient-text">Pune</span>
             </h1>
-            
+
             <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-              A practical learning platform designed to make you job-ready inside the Futora ecosystem.
+              Pune's learning-first career platform. Find the best startup roles and internships in Pune with skill-based hiring.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
-              <Button 
-                size="lg" 
+              <Button
+                size="lg"
                 className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 group"
+                onClick={() => scrollToSection('courses-section')}
               >
                 <BookOpen className="h-5 w-5 mr-2" />
                 Start Learning
                 <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
               </Button>
-              <Button 
-                variant="outline" 
+              <Button
+                variant="outline"
                 size="lg"
                 className="w-full sm:w-auto border-border hover:bg-accent text-base px-8 py-6"
+                onClick={() => scrollToSection('career-tracks-section')}
               >
                 <Target className="h-5 w-5 mr-2" />
                 Explore Career Paths
@@ -64,22 +76,22 @@ const Index = () => {
         <section className="py-8">
           <Tabs defaultValue="courses" className="w-full">
             <TabsList className="w-full justify-start bg-muted/50 p-1 rounded-lg mb-6">
-              <TabsTrigger 
-                value="courses" 
+              <TabsTrigger
+                value="courses"
                 className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
               >
                 <BookOpen className="h-4 w-4" />
                 Courses
               </TabsTrigger>
-              <TabsTrigger 
-                value="tracks" 
+              <TabsTrigger
+                value="tracks"
                 className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
               >
                 <Target className="h-4 w-4" />
                 Career Tracks
               </TabsTrigger>
-              <TabsTrigger 
-                value="projects" 
+              <TabsTrigger
+                value="projects"
                 className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
               >
                 <Hammer className="h-4 w-4" />
@@ -150,24 +162,30 @@ const Index = () => {
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
             >
-              <Link to="/internships">
-                <div className="clean-card p-8 hover-lift group cursor-pointer">
+              <Link to="/pune-internships">
+                <div className="clean-card p-8 hover-lift group cursor-pointer border-primary/20 bg-primary/5">
                   <div className="flex items-start gap-4">
                     <div className="h-14 w-14 rounded-2xl bg-primary/10 flex items-center justify-center shrink-0">
                       <GraduationCap className="h-7 w-7 text-primary" />
                     </div>
                     <div>
                       <h3 className="text-xl font-semibold text-foreground mb-2 group-hover:text-primary transition-colors">
-                        Internships
+                        Internships in Pune
                       </h3>
                       <p className="text-muted-foreground text-sm leading-relaxed">
-                        Paid and learning internships with mentorship and real impact.
+                        Exclusive local internships for Pune students. Paid and learning-focused roles.
                       </p>
                     </div>
                   </div>
                 </div>
               </Link>
             </motion.div>
+          </div>
+
+          <div className="mt-6 text-center">
+            <Link to="/pune-jobs" className="text-sm text-primary hover:underline font-medium inline-flex items-center gap-1">
+              View all startup jobs in Pune <ArrowRight className="h-3 w-3" />
+            </Link>
           </div>
         </section>
 
@@ -187,22 +205,22 @@ const Index = () => {
                 Join thousands of builders who are learning, building, and getting hired through Futora.
               </p>
               <div className="flex flex-col sm:flex-row gap-3 justify-center">
-                <Button 
-                  size="lg" 
+                <Button
+                  size="lg"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 group"
+                  onClick={() => scrollToSection('courses-section')}
                 >
                   Start Learning Now
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
                 </Button>
-                <Link to="/post">
-                  <Button 
-                    variant="outline" 
-                    size="lg"
-                    className="border-border hover:bg-accent w-full sm:w-auto"
-                  >
-                    Post a Role
-                  </Button>
-                </Link>
+                <Button
+                  variant="outline"
+                  size="lg"
+                  className="border-border hover:bg-accent w-full sm:w-auto"
+                  onClick={() => navigate(user ? "/post" : "/auth?redirect=/post")}
+                >
+                  Post a Role
+                </Button>
               </div>
             </div>
           </motion.div>

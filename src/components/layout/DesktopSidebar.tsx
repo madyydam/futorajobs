@@ -1,18 +1,20 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { 
-  BookOpen, 
-  Briefcase, 
-  GraduationCap, 
-  PlusCircle, 
+import {
+  BookOpen,
+  Briefcase,
+  GraduationCap,
+  PlusCircle,
   User,
   ChevronLeft,
   ChevronRight,
   Moon,
-  Sun
+  Sun,
+  LogOut
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
+import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
   { path: "/", label: "Learn", icon: BookOpen },
@@ -31,6 +33,7 @@ interface DesktopSidebarProps {
 
 export function DesktopSidebar({ collapsed, setCollapsed, isDark, setIsDark }: DesktopSidebarProps) {
   const location = useLocation();
+  const { user, signOut } = useAuth();
 
   return (
     <motion.aside
@@ -88,6 +91,18 @@ export function DesktopSidebar({ collapsed, setCollapsed, isDark, setIsDark }: D
 
       {/* Bottom section */}
       <div className="p-3 border-t border-sidebar-border space-y-2">
+        {user && (
+          <button
+            onClick={() => signOut()}
+            className="sidebar-link w-full text-destructive hover:bg-destructive/10"
+          >
+            <LogOut className="h-5 w-5 shrink-0" />
+            {!collapsed && (
+              <span className="whitespace-nowrap">Log Out</span>
+            )}
+          </button>
+        )}
+
         {/* Theme Toggle */}
         <button
           onClick={() => setIsDark(!isDark)}

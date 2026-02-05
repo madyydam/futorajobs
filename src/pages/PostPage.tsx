@@ -6,8 +6,11 @@ import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { Rocket, Check, Briefcase, GraduationCap } from "lucide-react";
+import { Rocket, Check, Briefcase, GraduationCap, Loader2, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useAuth } from "@/hooks/useAuth";
+import { supabase } from "@/integrations/supabase/client";
+import { toast } from "sonner";
 
 const visionTags = [
   "AI-first",
@@ -21,6 +24,8 @@ const visionTags = [
 
 const PostPage = () => {
   const navigate = useNavigate();
+  const { user, loading: authLoading } = useAuth();
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [postType, setPostType] = useState<"job" | "internship">("job");
   const [formData, setFormData] = useState({
@@ -36,9 +41,50 @@ const PostPage = () => {
     email: "",
   });
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmitted(true);
+    if (!user) {
+      toast.error("You must be logged in to post a role.");
+      return;
+    }
+
+    setIsSubmitting(true);
+    try {
+      if (postType === "job") {
+        const { error } = await supabase.from("jobs").insert({
+          title: formData.title,
+          company: formData.company,
+          description: formData.vision,
+          location: formData.location,
+          category: (formData.selectedTags[0]?.toLowerCase() || "development") as "ai" | "development" | "design" | "growth",
+          is_remote: formData.location === "Remote",
+          min_readiness_score: 50,
+          salary_range: "To be discussed",
+          experience_level: formData.type,
+        });
+        if (error) throw error;
+      } else {
+        const { error } = await supabase.from("internships").insert({
+          title: formData.title,
+          company: formData.company,
+          description: formData.vision,
+          location: formData.location,
+          category: (formData.selectedTags[0]?.toLowerCase() || "development") as "ai" | "development" | "design" | "growth",
+          is_remote: formData.location === "Remote",
+          min_readiness_score: 30,
+          stipend: formData.stipend,
+          duration: formData.duration,
+        });
+        if (error) throw error;
+      }
+
+      setSubmitted(true);
+      toast.success(`${postType === "job" ? "Job" : "Internship"} posted successfully!`);
+    } catch (error: any) {
+      toast.error(error.message || "Failed to post role");
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const toggleTag = (tag: string) => {
@@ -49,6 +95,46 @@ const PostPage = () => {
         : [...prev.selectedTags, tag],
     }));
   };
+
+  if (authLoading) {
+    return (
+      <Layout>
+        <div className="flex items-center justify-center min-h-[60vh]">
+          <Loader2 className="h-8 w-8 animate-spin text-primary" />
+        </div>
+      </Layout>
+    );
+  }
+
+  if (!user) {
+    return (
+      <Layout>
+        <div className="max-w-2xl mx-auto py-12 text-center">
+          <motion.div
+            initial={{ opacity: 0, scale: 0.95 }}
+            animate={{ opacity: 1, scale: 1 }}
+            className="clean-card p-12"
+          >
+            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+              <Rocket className="h-8 w-8 text-primary" />
+            </div>
+            <h1 className="text-2xl font-bold text-foreground mb-4">Post a Role</h1>
+            <p className="text-muted-foreground mb-8">
+              Sign in to FutoraJobs to find exceptional builders for your projects.
+            </p>
+            <Button
+              onClick={() => navigate("/auth")}
+              size="lg"
+              className="px-8"
+            >
+              <LogIn className="w-5 h-5 mr-2" />
+              Sign In to Continue
+            </Button>
+          </motion.div>
+        </div>
+      </Layout>
+    );
+  }
 
   if (submitted) {
     return (
@@ -367,9 +453,14 @@ const PostPage = () => {
               {/* Submit */}
               <Button
                 type="submit"
+                disabled={isSubmitting}
                 className="w-full bg-primary text-primary-foreground hover:bg-primary/90 py-6 text-base"
               >
-                <Rocket className="h-5 w-5 mr-2" />
+                {isSubmitting ? (
+                  <Loader2 className="h-5 w-5 animate-spin mr-2" />
+                ) : (
+                  <Rocket className="h-5 w-5 mr-2" />
+                )}
                 Publish {postType === "job" ? "Job" : "Internship"}
               </Button>
             </form>

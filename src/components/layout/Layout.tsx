@@ -10,14 +10,22 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
-  const [isDark, setIsDark] = useState(false);
+  const [isDark, setIsDark] = useState(() => {
+    if (typeof window !== "undefined") {
+      const saved = localStorage.getItem("futorajobs-theme");
+      return saved ? saved === "dark" : false;
+    }
+    return false;
+  });
 
-  // Apply theme class to document
+  // Apply theme class to document and save to localStorage
   useEffect(() => {
     if (isDark) {
       document.documentElement.classList.add("dark");
+      localStorage.setItem("futorajobs-theme", "dark");
     } else {
       document.documentElement.classList.remove("dark");
+      localStorage.setItem("futorajobs-theme", "light");
     }
   }, [isDark]);
 
@@ -41,15 +49,15 @@ export function Layout({ children }: LayoutProps) {
       <motion.main
         initial={false}
         animate={{
-          marginLeft: typeof window !== "undefined" && window.innerWidth >= 768 
-            ? (sidebarCollapsed ? 80 : 256) 
+          marginLeft: typeof window !== "undefined" && window.innerWidth >= 768
+            ? (sidebarCollapsed ? 80 : 256)
             : 0,
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="min-h-screen pt-16 pb-20 md:pt-0 md:pb-0"
         style={{
-          marginLeft: typeof window !== "undefined" && window.innerWidth >= 768 
-            ? (sidebarCollapsed ? 80 : 256) 
+          marginLeft: typeof window !== "undefined" && window.innerWidth >= 768
+            ? (sidebarCollapsed ? 80 : 256)
             : 0,
         }}
       >

@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
-import { Moon, Sun } from "lucide-react";
+import { Moon, Sun, LogOut } from "lucide-react";
 import { motion } from "framer-motion";
+import { useAuth } from "@/hooks/useAuth";
 
 interface MobileHeaderProps {
   isDark: boolean;
@@ -8,6 +9,8 @@ interface MobileHeaderProps {
 }
 
 export function MobileHeader({ isDark, setIsDark }: MobileHeaderProps) {
+  const { user, signOut } = useAuth();
+
   return (
     <motion.header
       initial={{ y: -60 }}
@@ -24,16 +27,27 @@ export function MobileHeader({ isDark, setIsDark }: MobileHeaderProps) {
           </span>
         </Link>
 
-        <button
-          onClick={() => setIsDark(!isDark)}
-          className="p-2 rounded-lg hover:bg-accent transition-colors"
-        >
-          {isDark ? (
-            <Sun className="h-5 w-5 text-foreground" />
-          ) : (
-            <Moon className="h-5 w-5 text-foreground" />
+        <div className="flex items-center gap-2">
+          {user && (
+            <button
+              onClick={() => signOut()}
+              className="p-2 rounded-lg hover:bg-accent transition-colors text-destructive"
+            >
+              <LogOut className="h-5 w-5" />
+            </button>
           )}
-        </button>
+
+          <button
+            onClick={() => setIsDark(!isDark)}
+            className="p-2 rounded-lg hover:bg-accent transition-colors"
+          >
+            {isDark ? (
+              <Sun className="h-5 w-5 text-foreground" />
+            ) : (
+              <Moon className="h-5 w-5 text-foreground" />
+            )}
+          </button>
+        </div>
       </div>
     </motion.header>
   );
