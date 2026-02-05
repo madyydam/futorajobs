@@ -1,6 +1,17 @@
-import { Job } from "@/components/jobs/JobCard";
-
-export const mockJobs: Job[] = [
+ // Legacy mock data - kept for reference but app now uses Supabase
+ export interface LegacyJob {
+   id: string;
+   title: string;
+   company: string;
+   vision: string;
+   skills: string[];
+   location: string;
+   type: string;
+   visionTags?: string[];
+   posted?: string;
+ }
+ 
+ export const mockJobs: LegacyJob[] = [
   {
     id: "1",
     title: "AI Engineer",
@@ -69,7 +80,7 @@ export const mockJobs: Job[] = [
   },
 ];
 
-export interface Internship {
+ export interface LegacyInternship {
   id: string;
   title: string;
   company: string;
@@ -82,7 +93,7 @@ export interface Internship {
   posted: string;
 }
 
-export const mockInternships: Internship[] = [
+ export const mockInternships: LegacyInternship[] = [
   {
     id: "i1",
     title: "AI Research Intern",
