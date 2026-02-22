@@ -3,8 +3,9 @@ import { ProjectCard } from "@/components/learn/ProjectCard";
 import { Button } from "@/components/ui/button";
 import { ArrowRight, Hammer } from "lucide-react";
 import { motion } from "framer-motion";
+import { memo } from "react";
 
-export function ProjectsSection() {
+export const ProjectsSection = memo(function ProjectsSection() {
   const featuredProjects = mockProjects.slice(0, 3);
 
   return (
@@ -40,8 +41,8 @@ export function ProjectsSection() {
         viewport={{ once: true }}
         className="text-center"
       >
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           size="lg"
           className="border-border hover:bg-accent group"
         >
@@ -51,4 +52,4 @@ export function ProjectsSection() {
       </motion.div>
     </section>
   );
-}
+});

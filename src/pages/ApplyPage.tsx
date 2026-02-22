@@ -6,7 +6,7 @@ import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft, ArrowRight, Check, Briefcase, Link2, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { mockJobs, mockInternships } from "@/data/jobs";
 import { cn } from "@/lib/utils";
@@ -30,27 +30,31 @@ const ApplyPage = () => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  // Find job or internship
-  const job = mockJobs.find((j) => j.id === jobId);
-  const internship = mockInternships.find((i) => i.id === jobId);
-  const listing = job || internship;
-  const isInternship = !!internship;
+  // Find job or internship - Memoized
+  const { listing, isInternship } = useMemo(() => {
+    const job = mockJobs.find((j) => j.id === jobId);
+    const internship = mockInternships.find((i) => i.id === jobId);
+    return {
+      listing: job || internship,
+      isInternship: !!internship
+    };
+  }, [jobId]);
 
-  const handleNext = () => {
+  const handleNext = useCallback(() => {
     if (currentStep < 3) {
-      setCurrentStep(currentStep + 1);
+      setCurrentStep(prev => prev + 1);
     } else {
       setSubmitted(true);
     }
-  };
+  }, [currentStep]);
 
-  const handleBack = () => {
+  const handleBack = useCallback(() => {
     if (currentStep > 1) {
-      setCurrentStep(currentStep - 1);
+      setCurrentStep(prev => prev - 1);
     }
-  };
+  }, [currentStep]);
 
-  const canProceed = () => {
+  const canProceed = useCallback(() => {
     switch (currentStep) {
       case 1:
         return formData.intent.trim().length > 20;
@@ -61,7 +65,7 @@ const ApplyPage = () => {
       default:
         return false;
     }
-  };
+  }, [currentStep, formData]);
 
   if (!listing) {
     return (

@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, BookOpen, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
-export function CoursesSection() {
+export const CoursesSection = memo(function CoursesSection() {
   const { courses, isLoading } = useCourses();
   // Show first 3 courses on homepage
   const featuredCourses = courses.slice(0, 3);
@@ -63,4 +64,4 @@ export function CoursesSection() {
       </motion.div>
     </section>
   );
-}
+});

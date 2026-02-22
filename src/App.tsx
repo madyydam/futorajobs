@@ -24,6 +24,9 @@ const CareerPathPage = lazy(() => import("./pages/CareerPathPage"));
 const PuneJobs = lazy(() => import("./pages/PuneJobs"));
 const PuneInternships = lazy(() => import("./pages/PuneInternships"));
 const FounderPage = lazy(() => import("./pages/FounderPage"));
+const InterviewCoach = lazy(() => import("./pages/InterviewCoach"));
+const ChatPage = lazy(() => import("./pages/Chat"));
+const FreelancingPage = lazy(() => import("./pages/Freelancing"));
 
 // Admin pages
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
@@ -143,6 +146,9 @@ const App = () => (
               <Route path="/post" element={<PostPage />} />
               <Route path="/post-job" element={<PostPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/interview-coach" element={<InterviewCoach />} />
+              <Route path="/chat" element={<ChatPage />} />
+              <Route path="/freelancing" element={<FreelancingPage />} />
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
               <Route path="*" element={<NotFound />} />
             </Routes>

@@ -21,7 +21,11 @@ export const useAuth = () => {
         setTimeout(() => reject(new Error("Timeout")), 5000)
       );
 
-      const { data, error } = await Promise.race([fetchPromise, timeoutPromise]) as any;
+      const result = await Promise.race([fetchPromise, timeoutPromise]);
+      const { data, error } = result as {
+        data: { role: string | null; user_role: string | null } | null;
+        error: unknown
+      };
 
       if (!error && data) {
         setRole(data.role || data.user_role || 'user');
@@ -63,17 +67,16 @@ export const useAuth = () => {
     initialize();
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (_event, session) => {
+      async (event, session) => {
         if (!mounted) return;
 
-        // Only set loading if it's a significant change
         setSession(session);
         setUser(session?.user ?? null);
 
-        if (session?.user) {
-          await fetchRole(session.user.id);
-        } else {
+        if (event === 'SIGNED_OUT' || event === 'USER_UPDATED' || !session) {
           setRole(null);
+        } else if (session?.user) {
+          await fetchRole(session.user.id);
         }
 
         if (mounted) {
@@ -89,7 +92,17 @@ export const useAuth = () => {
   }, []);
 
   const signOut = async () => {
-    await supabase.auth.signOut();
+    try {
+      setLoading(true);
+      await supabase.auth.signOut();
+      setRole(null);
+      setUser(null);
+      setSession(null);
+    } catch (error) {
+      console.error("Auth: Error signing out:", error);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const isAdmin = role === 'super_admin' || role === 'content_admin' || role === 'hiring_admin';

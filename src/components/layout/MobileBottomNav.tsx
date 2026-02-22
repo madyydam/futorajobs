@@ -1,13 +1,13 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
-import { BookOpen, Briefcase, GraduationCap, PlusCircle, User } from "lucide-react";
+import { BookOpen, Briefcase, GraduationCap, User, Zap } from "lucide-react";
 import { motion } from "framer-motion";
 
 const navItems = [
   { path: "/", label: "Learn", icon: BookOpen },
   { path: "/jobs", label: "Jobs", icon: Briefcase },
-  { path: "/internships", label: "Internships", icon: GraduationCap },
-  { path: "/post", label: "Post", icon: PlusCircle },
+  { path: "/internships", label: "Interns", icon: GraduationCap },
+  { path: "/freelancing", label: "Freelancing", icon: Zap },
   { path: "/profile", label: "Profile", icon: User },
 ];
 

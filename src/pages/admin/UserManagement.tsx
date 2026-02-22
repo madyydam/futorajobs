@@ -41,16 +41,17 @@ const UserManagement = () => {
             if (error) throw error;
             toast.success("Identity Permissions Updated");
             refetch();
-        } catch (error: any) {
-            toast.error(error.message || "Failed to update permissions");
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : "Failed to update permissions";
+            toast.error(errorMessage);
         } finally {
             setIsUpdating(null);
         }
     };
 
-    const filteredUsers = (users as any[])?.filter(u =>
-        u.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
-        u.email?.toLowerCase().includes(searchQuery.toLowerCase())
+    const filteredUsers = (users as unknown as { full_name: string; email: string }[])?.filter((u) =>
+    (u.full_name?.toLowerCase().includes(searchQuery.toLowerCase()) ||
+        u.email?.toLowerCase().includes(searchQuery.toLowerCase()))
     );
 
     return (
@@ -147,11 +148,11 @@ const UserManagement = () => {
                                                 <div className="flex items-center justify-center gap-3">
                                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.05] text-neutral-400 group-hover:text-primary transition-colors">
                                                         <Award className="h-3.5 w-3.5" />
-                                                        <span className="text-[10px] font-black tracking-tight">{(user.user_skills as any)?.[0]?.count || 0} SKILLS</span>
+                                                        <span className="text-[10px] font-black tracking-tight">{(user.user_skills as unknown as { count: number }[])?.[0]?.count || 0} SKILLS</span>
                                                     </div>
                                                     <div className="flex items-center gap-2 px-3 py-1.5 rounded-xl bg-white/[0.03] border border-white/[0.05] text-neutral-400 group-hover:text-purple-400 transition-colors">
                                                         <BookOpen className="h-3.5 w-3.5" />
-                                                        <span className="text-[10px] font-black tracking-tight">{(user.user_courses as any)?.[0]?.count || 0} COURSES</span>
+                                                        <span className="text-[10px] font-black tracking-tight">{(user.user_courses as unknown as { count: number }[])?.[0]?.count || 0} COURSES</span>
                                                     </div>
                                                 </div>
                                             </td>
@@ -159,7 +160,7 @@ const UserManagement = () => {
                                                 <div className="flex items-center justify-end gap-4">
                                                     <div className="flex items-center gap-2">
                                                         <select
-                                                            value={(user as any).user_role || (user as any).role || ""}
+                                                            value={(user as { user_role: string, role: string }).user_role || (user as { user_role: string, role: string }).role || ""}
                                                             onChange={(e) => handleRoleUpdate(user.id, e.target.value || null)}
                                                             disabled={isUpdating === user.id}
                                                             className="bg-background border border-border rounded-xl px-3 py-1.5 text-[10px] font-black uppercase tracking-widest text-muted-foreground focus:outline-none focus:ring-1 focus:ring-primary/20 transition-all cursor-pointer hover:bg-muted"
@@ -172,7 +173,7 @@ const UserManagement = () => {
                                                         </select>
                                                         {isUpdating === user.id ? (
                                                             <Loader2 className="h-4 w-4 animate-spin text-primary" />
-                                                        ) : (user as any).user_role ? (
+                                                        ) : (user as { user_role: string }).user_role ? (
                                                             <ShieldCheck className="h-4 w-4 text-primary" />
                                                         ) : (
                                                             <User className="h-4 w-4 text-neutral-700" />
@@ -196,7 +197,15 @@ const UserManagement = () => {
     );
 };
 
-const Button = ({ children, variant, size, className, onClick }: any) => (
+interface ButtonProps {
+    children: React.ReactNode;
+    variant?: "outline" | "solid";
+    size?: "sm" | "md" | "lg";
+    className?: string;
+    onClick?: () => void;
+}
+
+const Button = ({ children, variant, size, className, onClick }: ButtonProps) => (
     <button
         onClick={onClick}
         className={cn(

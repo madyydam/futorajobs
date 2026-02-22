@@ -7,16 +7,37 @@ import { motion } from "framer-motion";
 import { CoursesSection } from "@/components/home/CoursesSection";
 import { CareerTracksSection } from "@/components/home/CareerTracksSection";
 import { ProjectsSection } from "@/components/home/ProjectsSection";
-import { LearningModesSection } from "@/components/home/LearningModesSection";
 import { useAuth } from "@/hooks/useAuth";
+import { useCallback, useState } from "react";
+import { cn } from "@/lib/utils";
 
 const Index = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const scrollToSection = (sectionId: string) => {
+  const [activeTab, setActiveTab] = useState("courses");
+
+  const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
       element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }, []);
+
+  const getTabColor = (tab: string) => {
+    switch (tab) {
+      case 'courses': return 'bg-primary';
+      case 'tracks': return 'bg-orange-500';
+      case 'projects': return 'bg-emerald-600';
+      default: return 'bg-primary';
+    }
+  };
+
+  const getTabShadow = (tab: string) => {
+    switch (tab) {
+      case 'courses': return 'shadow-primary/40';
+      case 'tracks': return 'shadow-orange-500/40';
+      case 'projects': return 'shadow-emerald-600/40';
+      default: return 'shadow-primary/40';
     }
   };
 
@@ -46,70 +67,102 @@ const Index = () => {
               Pune's learning-first career platform. Find the best startup roles and internships in Pune with skill-based hiring.
             </p>
 
-            <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <div className="flex flex-row gap-3 justify-center px-4">
               <Button
-                size="lg"
-                className="w-full sm:w-auto bg-primary text-primary-foreground hover:bg-primary/90 text-base px-8 py-6 group"
+                size="sm"
+                className="flex-1 max-w-[160px] bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] md:text-sm px-2 md:px-4 py-3 group h-auto rounded-xl"
                 onClick={() => scrollToSection('courses-section')}
               >
-                <BookOpen className="h-5 w-5 mr-2" />
-                Start Learning
-                <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
+                <BookOpen className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Start Learning</span>
               </Button>
               <Button
                 variant="outline"
-                size="lg"
-                className="w-full sm:w-auto border-border hover:bg-accent text-base px-8 py-6"
+                size="sm"
+                className="flex-1 max-w-[160px] border-border hover:bg-accent text-[10px] md:text-sm px-2 md:px-4 py-3 h-auto rounded-xl"
                 onClick={() => scrollToSection('career-tracks-section')}
               >
-                <Target className="h-5 w-5 mr-2" />
-                Explore Career Paths
+                <Target className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Explore Paths</span>
               </Button>
             </div>
           </motion.div>
         </section>
 
-        {/* Learning Modes Section */}
-        <LearningModesSection />
+        {/* Tabbed Content Section - Redesigned Selection */}
+        <section id="path-selector-section" className="py-12 border-t border-border/50">
+          <div className="text-center mb-10">
+            <h2 className="text-2xl md:text-3xl font-bold tracking-tight mb-2">
+              Choose Your Path
+            </h2>
+            <p className="text-muted-foreground text-sm">Multiple paths, one destination: getting hired.</p>
+          </div>
 
-        {/* Tabbed Content Section */}
-        <section className="py-8">
-          <Tabs defaultValue="courses" className="w-full">
-            <TabsList className="w-full justify-start bg-muted/50 p-1 rounded-lg mb-6">
-              <TabsTrigger
-                value="courses"
-                className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              >
-                <BookOpen className="h-4 w-4" />
-                Courses
-              </TabsTrigger>
-              <TabsTrigger
-                value="tracks"
-                className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              >
-                <Target className="h-4 w-4" />
-                Career Tracks
-              </TabsTrigger>
-              <TabsTrigger
-                value="projects"
-                className="flex items-center gap-2 data-[state=active]:bg-card data-[state=active]:text-foreground data-[state=active]:shadow-sm"
-              >
-                <Hammer className="h-4 w-4" />
-                Projects
-              </TabsTrigger>
-            </TabsList>
+          <Tabs defaultValue="courses" onValueChange={setActiveTab} className="w-full relative">
+            {/* Dynamic Background Glow - Simplified to Cyan */}
+            <div className={cn(
+              "absolute inset-0 -z-10 blur-[100px] opacity-10 transition-all duration-700 rounded-full bg-[#00D1FF]"
+            )} />
 
-            <TabsContent value="courses" className="mt-0">
-              <CoursesSection />
-            </TabsContent>
+            <div className="flex justify-center mb-10">
+              <TabsList className="grid grid-cols-3 w-full max-w-xl bg-slate-100 dark:bg-slate-900/50 p-1 rounded-full border border-border/40 backdrop-blur-md self-center h-auto items-stretch">
+                {[
+                  { value: "courses", label: "COURSES", icon: BookOpen, activeColor: "data-[state=active]:!bg-[#00D1FF]" },
+                  { value: "tracks", label: "TRACKS", icon: Target, activeColor: "data-[state=active]:!bg-[#F97316]" },
+                  { value: "projects", label: "PROJECTS", icon: Hammer, activeColor: "data-[state=active]:!bg-[#10B981]" },
+                ].map((tab) => (
+                  <TabsTrigger
+                    key={tab.value}
+                    value={tab.value}
+                    className={cn(
+                      "flex items-center justify-center gap-2 px-4 py-2.5 rounded-full transition-all duration-300 relative group",
+                      "data-[state=active]:!text-white data-[state=active]:shadow-lg",
+                      "hover:bg-accent/30 text-slate-500 font-black text-[11px] tracking-tight",
+                      tab.activeColor
+                    )}
+                  >
+                    <tab.icon className="h-4 w-4 group-hover:scale-110 transition-transform" />
+                    <span className="whitespace-nowrap">{tab.label}</span>
+                  </TabsTrigger>
+                ))}
+              </TabsList>
+            </div>
 
-            <TabsContent value="tracks" className="mt-0">
-              <CareerTracksSection />
-            </TabsContent>
+            <motion.div
+              layout
+              initial={{ opacity: 0, x: 10 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.3 }}
+              onPanEnd={(_, info) => {
+                const swipeThreshold = 50;
+                const tabs = ["courses", "tracks", "projects"];
+                const currentIndex = tabs.indexOf(activeTab);
 
-            <TabsContent value="projects" className="mt-0">
-              <ProjectsSection />
-            </TabsContent>
+                // Detect horizontal swipe with threshold, and ensure it's mostly horizontal
+                if (Math.abs(info.offset.y) < 40) {
+                  if (info.offset.x < -swipeThreshold && currentIndex < tabs.length - 1) {
+                    // Swipe Left -> Next Tab
+                    setActiveTab(tabs[currentIndex + 1]);
+                  } else if (info.offset.x > swipeThreshold && currentIndex > 0) {
+                    // Swipe Right -> Previous Tab
+                    setActiveTab(tabs[currentIndex - 1]);
+                  }
+                }
+              }}
+              className="touch-pan-y"
+            >
+              <TabsContent value="courses" className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                <CoursesSection />
+              </TabsContent>
+
+              <TabsContent value="tracks" className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                <CareerTracksSection />
+              </TabsContent>
+
+              <TabsContent value="projects" className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                <ProjectsSection />
+              </TabsContent>
+            </motion.div>
           </Tabs>
         </section>
 
@@ -229,7 +282,7 @@ const Index = () => {
         {/* Footer */}
         <footer className="py-8 text-center border-t border-border mt-8">
           <p className="text-sm text-muted-foreground">
-            © 2025 Futora. Learn. Build. Get Hired.
+            © 2026 Futora. Learn. Build. Get Hired.
           </p>
         </footer>
       </div>

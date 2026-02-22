@@ -3,6 +3,7 @@ import { DesktopSidebar } from "./DesktopSidebar";
 import { MobileBottomNav } from "./MobileBottomNav";
 import { MobileHeader } from "./MobileHeader";
 import { motion } from "framer-motion";
+import { FloatingAIButton } from "./FloatingAIButton";
 
 interface LayoutProps {
   children: React.ReactNode;
@@ -10,6 +11,7 @@ interface LayoutProps {
 
 export function Layout({ children }: LayoutProps) {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false);
+  const [windowWidth, setWindowWidth] = useState(typeof window !== "undefined" ? window.innerWidth : 0);
   const [isDark, setIsDark] = useState(() => {
     if (typeof window !== "undefined") {
       const saved = localStorage.getItem("futorajobs-theme");
@@ -17,6 +19,15 @@ export function Layout({ children }: LayoutProps) {
     }
     return false;
   });
+
+  // Track window width for responsive layout calculations
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+
+    const handleResize = () => setWindowWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
 
   // Apply theme class to document and save to localStorage
   useEffect(() => {
@@ -49,14 +60,14 @@ export function Layout({ children }: LayoutProps) {
       <motion.main
         initial={false}
         animate={{
-          marginLeft: typeof window !== "undefined" && window.innerWidth >= 768
+          marginLeft: windowWidth >= 768
             ? (sidebarCollapsed ? 80 : 256)
             : 0,
         }}
         transition={{ duration: 0.3, ease: "easeInOut" }}
         className="min-h-screen pt-16 pb-20 md:pt-0 md:pb-0"
         style={{
-          marginLeft: typeof window !== "undefined" && window.innerWidth >= 768
+          marginLeft: windowWidth >= 768
             ? (sidebarCollapsed ? 80 : 256)
             : 0,
         }}
@@ -65,6 +76,9 @@ export function Layout({ children }: LayoutProps) {
           {children}
         </div>
       </motion.main>
+
+      {/* Floating AI Action Button */}
+      <FloatingAIButton />
     </div>
   );
 }

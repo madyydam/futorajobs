@@ -10,7 +10,10 @@ import {
   ChevronRight,
   Moon,
   Sun,
-  LogOut
+  LogOut,
+  Sparkles,
+  MessageSquare,
+  Zap
 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
@@ -20,7 +23,7 @@ const navItems = [
   { path: "/", label: "Learn", icon: BookOpen },
   { path: "/jobs", label: "Jobs", icon: Briefcase },
   { path: "/internships", label: "Internships", icon: GraduationCap },
-  { path: "/post", label: "Post", icon: PlusCircle },
+  { path: "/freelancing", label: "Freelancing", icon: Zap },
   { path: "/profile", label: "Profile", icon: User },
 ];
 
@@ -102,6 +105,17 @@ export function DesktopSidebar({ collapsed, setCollapsed, isDark, setIsDark }: D
             )}
           </button>
         )}
+
+        {/* Chat Shortcut */}
+        <Link
+          to="/chat"
+          className="sidebar-link w-full text-foreground hover:bg-primary/10"
+        >
+          <MessageSquare className="h-5 w-5 shrink-0" />
+          {!collapsed && (
+            <span className="whitespace-nowrap font-bold">Messages</span>
+          )}
+        </Link>
 
         {/* Theme Toggle */}
         <button

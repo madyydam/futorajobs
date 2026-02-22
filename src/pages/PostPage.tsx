@@ -4,13 +4,14 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { motion } from "framer-motion";
-import { useState } from "react";
+import { useState, useCallback, memo } from "react";
 import { useNavigate } from "react-router-dom";
 import { Rocket, Check, Briefcase, GraduationCap, Loader2, LogIn } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useAuth } from "@/hooks/useAuth";
 import { supabase } from "@/integrations/supabase/client";
 import { toast } from "sonner";
+import React from "react";
 
 const visionTags = [
   "AI-first",
@@ -21,6 +22,78 @@ const visionTags = [
   "Design-led",
   "Growth mindset",
 ];
+
+const AuthRequiredView = memo(({ onNavigate }: { onNavigate: (path: string) => void }) => (
+  <Layout>
+    <div className="max-w-2xl mx-auto py-12 text-center">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+        className="clean-card p-12"
+      >
+        <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+          <Rocket className="h-8 w-8 text-primary" />
+        </div>
+        <h1 className="text-2xl font-bold text-foreground mb-4">Post a Role</h1>
+        <p className="text-muted-foreground mb-8">
+          Sign in to FutoraCareer to find exceptional builders for your projects.
+        </p>
+        <Button
+          onClick={() => onNavigate("/auth")}
+          size="lg"
+          className="px-8"
+        >
+          <LogIn className="w-5 h-5 mr-2" />
+          Sign In to Continue
+        </Button>
+      </motion.div>
+    </div>
+  </Layout>
+));
+
+const SuccessView = memo(({ postType, title, onNavigate, onReset }: {
+  postType: string,
+  title: string,
+  onNavigate: (path: string) => void,
+  onReset: () => void
+}) => (
+  <Layout>
+    <div className="max-w-2xl mx-auto">
+      <motion.div
+        initial={{ opacity: 0, scale: 0.95 }}
+        animate={{ opacity: 1, scale: 1 }}
+      >
+        <div className="clean-card text-center py-16 px-8">
+          <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
+            <Rocket className="h-10 w-10 text-primary" />
+          </div>
+          <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
+            {postType === "job" ? "Job Posted!" : "Internship Posted!"} 🎉
+          </h1>
+          <p className="text-muted-foreground max-w-md mx-auto mb-8">
+            Your {postType} <span className="text-foreground font-medium">{title}</span> is now
+            live. Great builders will find you soon.
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center">
+            <Button
+              onClick={() => onNavigate(postType === "job" ? "/jobs" : "/internships")}
+              className="bg-primary text-primary-foreground hover:bg-primary/90"
+            >
+              View All {postType === "job" ? "Jobs" : "Internships"}
+            </Button>
+            <Button
+              variant="outline"
+              onClick={onReset}
+              className="border-border hover:bg-accent"
+            >
+              Post Another
+            </Button>
+          </div>
+        </div>
+      </motion.div>
+    </div>
+  </Layout>
+));
 
 const PostPage = () => {
   const navigate = useNavigate();
@@ -41,7 +114,9 @@ const PostPage = () => {
     email: "",
   });
 
-  const handleSubmit = async (e: React.FormEvent) => {
+  const handleNavigate = useCallback((path: string) => navigate(path), [navigate]);
+
+  const handleSubmit = useCallback(async (e: React.FormEvent) => {
     e.preventDefault();
     if (!user) {
       toast.error("You must be logged in to post a role.");
@@ -78,23 +153,40 @@ const PostPage = () => {
         if (error) throw error;
       }
 
-      setSubmitted(true);
       toast.success(`${postType === "job" ? "Job" : "Internship"} posted successfully!`);
-    } catch (error: any) {
-      toast.error(error.message || "Failed to post role");
+      setSubmitted(true);
+    } catch (error) {
+      const errorMessage = error instanceof Error ? error.message : "Failed to post role";
+      toast.error(errorMessage);
     } finally {
       setIsSubmitting(false);
     }
-  };
+  }, [user, postType, formData]);
 
-  const toggleTag = (tag: string) => {
+  const toggleTag = useCallback((tag: string) => {
     setFormData((prev) => ({
       ...prev,
       selectedTags: prev.selectedTags.includes(tag)
         ? prev.selectedTags.filter((t) => t !== tag)
         : [...prev.selectedTags, tag],
     }));
-  };
+  }, []);
+
+  const handleReset = useCallback(() => {
+    setSubmitted(false);
+    setFormData({
+      title: "",
+      company: "",
+      vision: "",
+      skills: "",
+      location: "Remote",
+      type: "Full-time",
+      duration: "3 months",
+      stipend: "",
+      selectedTags: [],
+      email: "",
+    });
+  }, []);
 
   if (authLoading) {
     return (
@@ -107,87 +199,17 @@ const PostPage = () => {
   }
 
   if (!user) {
-    return (
-      <Layout>
-        <div className="max-w-2xl mx-auto py-12 text-center">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="clean-card p-12"
-          >
-            <div className="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-              <Rocket className="h-8 w-8 text-primary" />
-            </div>
-            <h1 className="text-2xl font-bold text-foreground mb-4">Post a Role</h1>
-            <p className="text-muted-foreground mb-8">
-              Sign in to FutoraCareer to find exceptional builders for your projects.
-            </p>
-            <Button
-              onClick={() => navigate("/auth")}
-              size="lg"
-              className="px-8"
-            >
-              <LogIn className="w-5 h-5 mr-2" />
-              Sign In to Continue
-            </Button>
-          </motion.div>
-        </div>
-      </Layout>
-    );
+    return <AuthRequiredView onNavigate={handleNavigate} />;
   }
 
   if (submitted) {
     return (
-      <Layout>
-        <div className="max-w-2xl mx-auto">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.95 }}
-            animate={{ opacity: 1, scale: 1 }}
-          >
-            <div className="clean-card text-center py-16 px-8">
-              <div className="w-20 h-20 rounded-full bg-primary/10 flex items-center justify-center mx-auto mb-6">
-                <Rocket className="h-10 w-10 text-primary" />
-              </div>
-              <h1 className="text-2xl md:text-3xl font-bold text-foreground mb-4">
-                {postType === "job" ? "Job Posted!" : "Internship Posted!"} 🎉
-              </h1>
-              <p className="text-muted-foreground max-w-md mx-auto mb-8">
-                Your {postType} <span className="text-foreground font-medium">{formData.title}</span> is now
-                live. Great builders will find you soon.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                <Button
-                  onClick={() => navigate(postType === "job" ? "/jobs" : "/internships")}
-                  className="bg-primary text-primary-foreground hover:bg-primary/90"
-                >
-                  View All {postType === "job" ? "Jobs" : "Internships"}
-                </Button>
-                <Button
-                  variant="outline"
-                  onClick={() => {
-                    setSubmitted(false);
-                    setFormData({
-                      title: "",
-                      company: "",
-                      vision: "",
-                      skills: "",
-                      location: "Remote",
-                      type: "Full-time",
-                      duration: "3 months",
-                      stipend: "",
-                      selectedTags: [],
-                      email: "",
-                    });
-                  }}
-                  className="border-border hover:bg-accent"
-                >
-                  Post Another
-                </Button>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </Layout>
+      <SuccessView
+        postType={postType}
+        title={formData.title}
+        onNavigate={handleNavigate}
+        onReset={handleReset}
+      />
     );
   }
 

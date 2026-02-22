@@ -166,7 +166,7 @@ This document provides an exhaustive, end-to-end breakdown of the FutoraCareer (
 
 1.  **Version History**
     *   2024: MVP Launch as FutoraJobs.
-    *   2025 (Current): Rebranded to FutoraCareer (Career OS), Admin Engine V2.
+    *   2026 (Current): Rebranded to FutoraCareer (Career OS), Admin Engine V2.
     *   Future: Futora Ecosystem expansion.
 
 2.  **User Roles & Permissions**

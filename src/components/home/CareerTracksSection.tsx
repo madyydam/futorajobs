@@ -4,8 +4,9 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight, Target, Loader2 } from "lucide-react";
 import { motion } from "framer-motion";
 import { Link } from "react-router-dom";
+import { memo } from "react";
 
-export function CareerTracksSection() {
+export const CareerTracksSection = memo(function CareerTracksSection() {
   const { careerPaths, isLoading } = useCareerPaths();
   const featuredTracks = careerPaths.slice(0, 2);
 
@@ -62,4 +63,4 @@ export function CareerTracksSection() {
       </motion.div>
     </section>
   );
-}
+});

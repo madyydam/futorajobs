@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Moon, Sun, LogOut } from "lucide-react";
+import { Moon, Sun, LogOut, MessageSquare } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -27,7 +27,14 @@ export function MobileHeader({ isDark, setIsDark }: MobileHeaderProps) {
           </span>
         </Link>
 
-        <div className="flex items-center gap-2">
+        <div className="flex items-center gap-1">
+          <Link
+            to="/chat"
+            className="p-2 rounded-lg hover:bg-accent transition-colors text-foreground"
+          >
+            <MessageSquare className="h-5 w-5" />
+          </Link>
+
           {user && (
             <button
               onClick={() => signOut()}

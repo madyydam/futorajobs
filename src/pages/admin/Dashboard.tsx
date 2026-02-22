@@ -4,7 +4,17 @@ import { Users, BookOpen, Target, Briefcase, GraduationCap, TrendingUp, Sparkles
 import { useQuery } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
 
-const StatCard = ({ icon: Icon, label, value, trend, color }: any) => (
+import { LucideIcon } from "lucide-react";
+
+interface StatCardProps {
+    icon: LucideIcon;
+    label: string;
+    value: string | number;
+    trend?: string;
+    color?: string;
+}
+
+const StatCard = ({ icon: Icon, label, value, trend, color }: StatCardProps) => (
     <div className="bg-card border border-border p-8 rounded-[2rem] hover:bg-muted/50 transition-all duration-500 group">
         <div className="flex items-start justify-between">
             <div>
