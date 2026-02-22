@@ -72,7 +72,7 @@ const App = () => (
               <Route path="/jobs-in-pune" element={<PuneJobs />} />
               <Route path="/pune-internships" element={<PuneInternships />} />
               <Route path="/internships-in-pune" element={<PuneInternships />} />
-              <Route path="/futorajobs-pune" element={<Index />} />
+              <Route path="/futoracareer-pune" element={<Index />} />
 
               {/* Persona / Brand SEO */}
               <Route path="/madhur-dhadve" element={<FounderPage />} />

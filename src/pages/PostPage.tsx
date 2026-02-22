@@ -120,7 +120,7 @@ const PostPage = () => {
             </div>
             <h1 className="text-2xl font-bold text-foreground mb-4">Post a Role</h1>
             <p className="text-muted-foreground mb-8">
-              Sign in to FutoraJobs to find exceptional builders for your projects.
+              Sign in to FutoraCareer to find exceptional builders for your projects.
             </p>
             <Button
               onClick={() => navigate("/auth")}
@@ -466,8 +466,8 @@ const PostPage = () => {
             </form>
           </div>
         </motion.div>
-      </div>
-    </Layout>
+      </div >
+    </Layout >
   );
 };
 

@@ -81,7 +81,7 @@ const FounderPage = () => {
                         </div>
                         <h3 className="text-xl font-bold mb-4">Building Pune</h3>
                         <p className="text-muted-foreground leading-relaxed">
-                            As a Pune native, Madhur is committed to strengthening the local startup ecosystem. FutoraJobs is optimized to bring the best startup culture directly to Pune's talented student community.
+                            As a Pune native, Madhur is committed to strengthening the local startup ecosystem. FutoraCareer is optimized to bring the best startup culture directly to Pune's talented student community.
                         </p>
                     </motion.div>
                 </div>
@@ -90,7 +90,7 @@ const FounderPage = () => {
                 <section className="mb-16">
                     <h2 className="text-2xl font-bold text-center mb-8">Building the Futora Ecosystem</h2>
                     <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-                        {['FutoraJobs', 'FutoraOne', 'FutoraFlow'].map((item, idx) => (
+                        {['FutoraCareer', 'FutoraOne', 'FutoraFlow'].map((item, idx) => (
                             <div key={item} className="flex items-center gap-3 p-4 rounded-xl border border-border bg-card/50">
                                 <Sparkles className="h-5 w-5 text-primary" />
                                 <span className="font-medium">{item}</span>

@@ -23,7 +23,7 @@ export function MobileHeader({ isDark, setIsDark }: MobileHeaderProps) {
             <span className="text-sm font-bold text-primary-foreground">F</span>
           </div>
           <span className="text-lg font-semibold text-foreground">
-            Futora<span className="text-primary">Jobs</span>
+            Futora<span className="text-primary">Career</span>
           </span>
         </Link>
 

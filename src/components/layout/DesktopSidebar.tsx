@@ -54,7 +54,7 @@ export function DesktopSidebar({ collapsed, setCollapsed, isDark, setIsDark }: D
               animate={{ opacity: 1 }}
               className="text-lg font-semibold text-foreground whitespace-nowrap"
             >
-              Futora<span className="text-primary">Jobs</span>
+              Futora<span className="text-primary">Career</span>
             </motion.span>
           )}
         </Link>
