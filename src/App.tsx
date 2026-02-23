@@ -27,6 +27,15 @@ const FounderPage = lazy(() => import("./pages/FounderPage"));
 const InterviewCoach = lazy(() => import("./pages/InterviewCoach"));
 const ChatPage = lazy(() => import("./pages/Chat"));
 const FreelancingPage = lazy(() => import("./pages/Freelancing"));
+// Marketplace
+const CreateService = lazy(() => import("./pages/marketplace/CreateService"));
+const FreelancerDashboard = lazy(() => import("./pages/marketplace/FreelancerDashboard"));
+const ClientDashboard = lazy(() => import("./pages/marketplace/ClientDashboard"));
+const CategoryPage = lazy(() => import("./pages/marketplace/CategoryPage"));
+
+const MarketplaceExplore = lazy(() => import("./pages/Freelancing"));
+
+
 
 // Admin pages
 const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
@@ -149,7 +158,14 @@ const App = () => (
               <Route path="/interview-coach" element={<InterviewCoach />} />
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/freelancing" element={<FreelancingPage />} />
+              <Route path="/freelancing/create" element={<CreateService />} />
+              <Route path="/freelancing/dashboard" element={<FreelancerDashboard />} />
+              <Route path="/freelancing/client-dashboard" element={<ClientDashboard />} />
+              <Route path="/freelancing/category/:categorySlug" element={<CategoryPage />} />
+
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
+
+
               <Route path="*" element={<NotFound />} />
             </Routes>
           </Suspense>
