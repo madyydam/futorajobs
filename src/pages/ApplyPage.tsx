@@ -7,9 +7,11 @@ import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { ArrowLeft, ArrowRight, Check, Briefcase, Link2, Clock } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 import { useState, useCallback, useMemo } from "react";
-import { useParams, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { mockJobs, mockInternships } from "@/data/jobs";
 import { cn } from "@/lib/utils";
+import { useChatStore } from "@/hooks/useChatStore";
+
 
 const steps = [
   { id: 1, title: "Intent", icon: Briefcase },
@@ -67,6 +69,26 @@ const ApplyPage = () => {
     }
   }, [currentStep, formData]);
 
+  // Redirect to chat after successful application
+  const startNewChat = useChatStore(state => state.startNewChat);
+
+  const handleViewStatus = useCallback(() => {
+    if (listing) {
+      startNewChat({
+        id: `chat_${listing.id}`,
+        name: `${listing.company} (Recruitment)`,
+        role: "Recruitment Lead",
+        avatar: `https://ui-avatars.com/api/?name=${listing.company}&background=random`,
+        lastMessage: "Applied successfully",
+        time: "Just now",
+        unread: 0,
+        online: true
+      }, `Hi, I just applied for the ${listing.title} position. Looking forward to hearing from you!`);
+      navigate("/chat");
+    }
+  }, [listing, navigate, startNewChat]);
+
+
   if (!listing) {
     return (
       <Layout>
@@ -100,18 +122,28 @@ const ApplyPage = () => {
                 <span className="text-foreground font-medium">{listing.company}</span> has been received.
                 We'll get back to you soon.
               </p>
-              <Button
-                onClick={() => navigate(isInternship ? "/internships" : "/jobs")}
-                className="bg-primary text-primary-foreground hover:bg-primary/90"
-              >
-                Explore More Roles
-              </Button>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <Button
+                  onClick={handleViewStatus}
+                  className="bg-primary text-primary-foreground hover:bg-primary/90"
+                >
+                  View Status in Chat
+                </Button>
+                <Button
+                  variant="outline"
+                  onClick={() => navigate(isInternship ? "/internships" : "/jobs")}
+                  className="border-border hover:bg-muted"
+                >
+                  Explore More Roles
+                </Button>
+              </div>
             </div>
           </motion.div>
         </div>
       </Layout>
     );
   }
+
 
   return (
     <Layout>

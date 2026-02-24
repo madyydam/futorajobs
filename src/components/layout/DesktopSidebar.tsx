@@ -13,18 +13,27 @@ import {
   LogOut,
   Sparkles,
   MessageSquare,
-  Zap
+  Zap,
+  PlayCircle,
+  Globe,
+  Brain,
+  Trophy
 } from "lucide-react";
+
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
-  { path: "/", label: "Learn", icon: BookOpen },
+  { path: "/", label: "Courses", icon: BookOpen },
+  { path: "/learning", label: "Learning Hub", icon: PlayCircle },
+  { path: "/ai-copilot", label: "AI Copilot", icon: Brain },
   { path: "/jobs", label: "Jobs", icon: Briefcase },
+  { path: "/events", label: "Events", icon: Trophy },
   { path: "/internships", label: "Internships", icon: GraduationCap },
   { path: "/freelancing", label: "Freelancing", icon: Zap },
   { path: "/profile", label: "Profile", icon: User },
+  { path: "/community", label: "Startup Community", icon: Globe },
 ];
 
 interface DesktopSidebarProps {

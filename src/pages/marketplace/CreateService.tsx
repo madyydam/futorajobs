@@ -9,21 +9,44 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
 import { toast } from "sonner";
+import { useFreelance } from "@/hooks/useFreelance";
 
 const CreateService = () => {
     const navigate = useNavigate();
+    const { createService, categories } = useFreelance();
     const [loading, setLoading] = useState(false);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    // Form State
+    const [formData, setFormData] = useState({
+        title: "",
+        category_id: "",
+        delivery_time: "",
+        price: "",
+        price_type: "fixed" as "fixed" | "hourly",
+        description: "",
+    });
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         setLoading(true);
 
-        // Simulate API call
-        setTimeout(() => {
-            toast.success("Gig published successfully! It will be live after a quick review.");
-            setLoading(false);
+        try {
+            await createService.mutateAsync({
+                ...formData,
+                price: parseFloat(formData.price),
+                portfolio_urls: [], // Add logic for file uploads later
+                tags: [],
+                is_active: true
+            });
+
+            toast.success("Gig published successfully! It's now live on the marketplace.");
             navigate("/freelancing");
-        }, 1500);
+        } catch (error: any) {
+            console.error("Error creating service:", error);
+            toast.error(error.message || "Failed to publish gig. Please try again.");
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
@@ -57,6 +80,8 @@ const CreateService = () => {
                             <Label htmlFor="title" className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Gig Title</Label>
                             <Input
                                 id="title"
+                                value={formData.title}
+                                onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                                 placeholder="e.g., I will design a modern SaaS landing page"
                                 className="h-12 bg-black/40 border-white/10 rounded-xl focus:border-primary/50"
                                 required
@@ -66,16 +91,25 @@ const CreateService = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="category" className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Category</Label>
-                                <Select required>
+                                <Select
+                                    value={formData.category_id}
+                                    onValueChange={(val) => setFormData({ ...formData, category_id: val })}
+                                    required
+                                >
                                     <SelectTrigger className="h-12 bg-black/40 border-white/10 rounded-xl">
                                         <SelectValue placeholder="Select Category" />
                                     </SelectTrigger>
                                     <SelectContent className="bg-neutral-900 border-white/10">
-                                        <SelectItem value="ui-ux">UI/UX Design</SelectItem>
-                                        <SelectItem value="frontend">Frontend Development</SelectItem>
-                                        <SelectItem value="backend">Backend Development</SelectItem>
-                                        <SelectItem value="ai">AI & ML Services</SelectItem>
-                                        <SelectItem value="content">Content Writing</SelectItem>
+                                        {categories.data?.map((cat) => (
+                                            <SelectItem key={cat.id} value={cat.id}>{cat.name}</SelectItem>
+                                        ))}
+                                        {!categories.data && (
+                                            <>
+                                                <SelectItem value="ui-ux">UI/UX Design</SelectItem>
+                                                <SelectItem value="frontend">Frontend Development</SelectItem>
+                                                <SelectItem value="backend">Backend Development</SelectItem>
+                                            </>
+                                        )}
                                     </SelectContent>
                                 </Select>
                             </div>
@@ -83,6 +117,8 @@ const CreateService = () => {
                                 <Label htmlFor="delivery" className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Expected Delivery</Label>
                                 <Input
                                     id="delivery"
+                                    value={formData.delivery_time}
+                                    onChange={(e) => setFormData({ ...formData, delivery_time: e.target.value })}
                                     placeholder="e.g., 3 Days"
                                     className="h-12 bg-black/40 border-white/10 rounded-xl focus:border-primary/50"
                                     required
@@ -103,7 +139,10 @@ const CreateService = () => {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                             <div className="space-y-2">
                                 <Label htmlFor="price_type" className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Pricing Model</Label>
-                                <Select defaultValue="fixed">
+                                <Select
+                                    value={formData.price_type}
+                                    onValueChange={(val: any) => setFormData({ ...formData, price_type: val })}
+                                >
                                     <SelectTrigger className="h-12 bg-black/40 border-white/10 rounded-xl">
                                         <SelectValue />
                                     </SelectTrigger>
@@ -118,6 +157,8 @@ const CreateService = () => {
                                 <Input
                                     id="price"
                                     type="number"
+                                    value={formData.price}
+                                    onChange={(e) => setFormData({ ...formData, price: e.target.value })}
                                     placeholder="5000"
                                     className="h-12 bg-black/40 border-white/10 rounded-xl focus:border-primary/50"
                                     required
@@ -129,6 +170,8 @@ const CreateService = () => {
                             <Label htmlFor="description" className="text-xs font-bold uppercase tracking-widest text-muted-foreground ml-1">Gig Description</Label>
                             <Textarea
                                 id="description"
+                                value={formData.description}
+                                onChange={(e) => setFormData({ ...formData, description: e.target.value })}
                                 placeholder="Describe what you offer in detail..."
                                 className="min-h-[150px] bg-black/40 border-white/10 rounded-xl focus:border-primary/50 resize-none"
                                 required
@@ -156,7 +199,7 @@ const CreateService = () => {
                         <div className="pt-4 flex flex-col md:flex-row gap-4">
                             <Button
                                 type="submit"
-                                disabled={loading}
+                                disabled={loading || createService.isPending}
                                 className="flex-1 h-14 rounded-2xl bg-primary text-black font-black uppercase tracking-[0.2em] hover:bg-primary/90 shadow-[0_0_30px_rgba(16,185,129,0.2)]"
                             >
                                 {loading ? "PUBLISHING..." : "PUBLISH GIG"}

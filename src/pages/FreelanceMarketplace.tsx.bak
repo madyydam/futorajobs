@@ -1,0 +1,186 @@
+import { Layout } from "@/components/layout/Layout";
+import { motion, AnimatePresence } from "framer-motion";
+import {
+    Zap,
+    Search,
+    Filter,
+    Plus,
+    MessageSquare,
+    Sparkles,
+    TrendingUp,
+    ShieldCheck,
+    ArrowRight,
+    Rocket,
+    Globe,
+    Code,
+    Palette,
+    Terminal,
+    Video
+} from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { CategoryCard } from "@/components/marketplace/CategoryCard";
+import { ServiceCard } from "@/components/marketplace/ServiceCard";
+import { Link } from "react-router-dom";
+import { FreelanceCategory, FreelanceService } from "@/types/marketplace";
+import { useState } from "react";
+
+const MOCK_CATEGORIES: FreelanceCategory[] = [
+    { id: "1", name: "UI/UX Design", slug: "ui-ux", icon: "Palette", description: "Visual and interactive design for digital products." },
+    { id: "2", name: "Frontend Dev", slug: "frontend", icon: "Code", description: "Building responsive and interactive user interfaces." },
+    { id: "3", name: "Backend Dev", slug: "backend", icon: "Terminal", description: "Server-side logic and database management." },
+    { id: "4", name: "AI Training", slug: "ai", icon: "Sparkles", description: "Specialized AI model training and expert prompting." },
+    { id: "5", name: "Video Editing", slug: "video", icon: "Video", description: "High-impact video production and motion graphics." },
+    { id: "6", name: "Growth Hacking", slug: "growth", icon: "TrendingUp", description: "Full-funnel marketing and conversion optimization." },
+];
+
+const MOCK_SERVICES: FreelanceService[] = [
+    {
+        id: "s1",
+        freelancer_id: "f1",
+        category_id: "1",
+        title: "Premium Mobile App Design with Motion Systems",
+        description: "I will design a modern, conversion-focused mobile app with custom micro-interactions.",
+        price_type: "fixed",
+        price: 15000,
+        delivery_time: "5 Days",
+        portfolio_urls: ["https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&q=80"],
+        tags: ["Mobile", "Figma", "UI/UX"],
+        is_active: true,
+        freelancer: {
+            id: "f1",
+            user_id: "u1",
+            tagline: "Product Designer @ Futora",
+            bio: "Experienced UI/UX designer specialized in SaaS and fintech.",
+            hourly_rate: 1500,
+            experience_years: 4,
+            is_verified: true,
+            full_name: "Rahul Sharma",
+            avatar_url: "https://i.pravatar.cc/150?u=rahul"
+        },
+        category: MOCK_CATEGORIES[0]
+    },
+    {
+        id: "s2",
+        freelancer_id: "f2",
+        category_id: "2",
+        title: "Enterprise Grade Next.js SaaS Architecture",
+        description: "Highly performant, scalable and secure SaaS application foundation.",
+        price_type: "fixed",
+        price: 25000,
+        delivery_time: "7 Days",
+        portfolio_urls: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&q=80"],
+        tags: ["Next.js", "Tailwind", "Architecture"],
+        is_active: true,
+        freelancer: {
+            id: "f2",
+            user_id: "u2",
+            tagline: "Vercel Trusted Partner",
+            bio: "Building the future with React and Server Components.",
+            hourly_rate: 3000,
+            experience_years: 5,
+            is_verified: true,
+            full_name: "Priya Das",
+            avatar_url: "https://i.pravatar.cc/150?u=priya"
+        },
+        category: MOCK_CATEGORIES[1]
+    }
+];
+
+const FreelanceMarketplace = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+
+    return (
+        <Layout>
+            <div className="relative min-h-screen pb-20">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[600px] bg-primary/10 blur-[150px] -z-10 rounded-full opacity-50" />
+
+                <div className="max-w-7xl mx-auto px-6 pt-12">
+                    {/* Premium Header */}
+                    <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-16 px-2">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="space-y-4"
+                        >
+                            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase">
+                                <Rocket className="h-4 w-4" />
+                                Talent Marketplace 2.0
+                            </div>
+                            <h1 className="text-5xl md:text-8xl font-black text-white tracking-tighter leading-[0.9] italic uppercase">
+                                FUTORA <span className="text-primary/40">GIGS</span>
+                            </h1>
+                            <p className="text-muted-foreground text-lg max-w-xl font-medium leading-relaxed">
+                                Curated elite talent for high-growth startups. Hire verified builders or launch your freelancing career with zero commission.
+                            </p>
+                        </motion.div>
+
+                        <div className="flex flex-wrap items-center gap-4">
+                            <div className="flex bg-white/5 backdrop-blur-md p-1.5 rounded-3xl border border-white/10">
+                                <Button asChild variant="ghost" className="rounded-2xl font-black text-xs h-12 px-6 hover:bg-white/5">
+                                    <Link to="/freelancing/dashboard">FREELANCER</Link>
+                                </Button>
+                                <Button asChild variant="ghost" className="rounded-2xl font-black text-xs h-12 px-6 hover:bg-white/5">
+                                    <Link to="/freelancing/client-dashboard">CLIENT</Link>
+                                </Button>
+                            </div>
+                            <Button asChild className="h-14 rounded-3xl bg-primary text-black hover:bg-primary/90 font-black px-8 shadow-lg shadow-primary/20 border-t border-white/20">
+                                <Link to="/freelancing/create">
+                                    <Plus className="h-5 w-5 mr-2" />
+                                    POST A GIG
+                                </Link>
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Elite Search */}
+                    <div className="relative z-10 mb-20">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-primary/20 to-blue-500/20 rounded-[2.5rem] blur-md opacity-50" />
+                        <div className="relative flex flex-col md:flex-row gap-4 p-4 bg-slate-900/50 backdrop-blur-2xl border border-white/10 rounded-[2.5rem]">
+                            <div className="relative flex-1">
+                                <Search className="absolute left-6 top-1/2 -translate-y-1/2 h-6 w-6 text-muted-foreground" />
+                                <Input
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search for 'Next.js Dev', 'UI Designer' or 'AI Expert'..."
+                                    className="h-16 pl-16 pr-8 bg-black/40 border-white/5 rounded-3xl focus:border-primary/50 transition-all font-bold text-lg placeholder:text-muted-foreground/40 text-white"
+                                />
+                            </div>
+                            <Button className="h-16 px-8 rounded-3xl bg-white text-black hover:bg-slate-200 font-black shadow-xl">
+                                SEARCH
+                            </Button>
+                        </div>
+                    </div>
+
+                    {/* Categories */}
+                    <section className="mb-24">
+                        <div className="flex items-center justify-between mb-10 px-2">
+                            <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">Elite Categories</h2>
+                            <div className="hidden md:block h-px flex-1 mx-12 bg-gradient-to-r from-white/10 to-transparent"></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {MOCK_CATEGORIES.map((cat) => (
+                                <CategoryCard key={cat.id} category={cat} />
+                            ))}
+                        </div>
+                    </section>
+
+                    {/* Services */}
+                    <section className="mb-24">
+                        <div className="flex items-center justify-between mb-10 px-2">
+                            <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">Featured Gigs</h2>
+                            <div className="hidden md:block h-px flex-1 mx-12 bg-gradient-to-r from-white/10 to-transparent"></div>
+                        </div>
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                            {MOCK_SERVICES.map((service) => (
+                                <ServiceCard key={service.id} service={service} />
+                            ))}
+                        </div>
+                    </section>
+                </div>
+            </div>
+        </Layout>
+    );
+};
+
+export default FreelanceMarketplace;

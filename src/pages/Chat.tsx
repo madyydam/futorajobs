@@ -1,99 +1,40 @@
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { motion, AnimatePresence } from "framer-motion";
-import { MessageSquare, Send, User, Bot, Search, MoreVertical, Phone, Video, ChevronLeft } from "lucide-react";
+import { Send, Search, MoreVertical, Phone, Video, ChevronLeft } from "lucide-react";
 import { useState, useRef, useEffect, useCallback, memo } from "react";
 import { cn } from "@/lib/utils";
 import { Input } from "@/components/ui/input";
-
-interface ChatPartner {
-    id: string;
-    name: string;
-    role: string;
-    avatar: string;
-    lastMessage: string;
-    time: string;
-    unread: number;
-    online: boolean;
-}
-
-interface Message {
-    id: string;
-    senderId: string;
-    content: string;
-    timestamp: Date;
-}
+import { useChatStore, ChatPartner, Message } from "@/hooks/useChatStore";
 
 const Chat = () => {
-    const [partners] = useState<ChatPartner[]>([
-        {
-            id: "1",
-            name: "Sahil (Founder, AutoAI)",
-            role: "CEO & Founder",
-            avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=100&h=100&fit=crop",
-            lastMessage: "The project looks promising. When can we chat?",
-            time: "10:30 AM",
-            unread: 2,
-            online: true,
-        },
-        {
-            id: "2",
-            name: "Priya (HR, DevStream)",
-            role: "Recruitment Lead",
-            avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop",
-            lastMessage: "Thanks for applying! We'll review it.",
-            time: "Yesterday",
-            unread: 0,
-            online: false,
-        },
-        {
-            id: "3",
-            name: "Rahul (CTO, PuneTech)",
-            role: "CTO",
-            avatar: "https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=100&h=100&fit=crop",
-            lastMessage: "Can you send your GitHub profile?",
-            time: "2 days ago",
-            unread: 0,
-            online: true,
-        },
-    ]);
-
-    const [activePartnerId, setActivePartnerId] = useState(partners[0].id);
-    const [messages, setMessages] = useState<Message[]>([
-        { id: "1", senderId: "1", content: "Hey! I saw your portfolio on FutoraCareer. Great stuff.", timestamp: new Date(Date.now() - 3600000) },
-        { id: "2", senderId: "me", content: "Thanks Sahil! Glad you liked it.", timestamp: new Date(Date.now() - 3000000) },
-        { id: "3", senderId: "1", content: "The project looks promising. When can we chat?", timestamp: new Date(Date.now() - 2500000) },
-    ]);
+    const { partners, messages, activePartnerId, setActivePartner, sendMessage } = useChatStore();
     const [inputValue, setInputValue] = useState("");
     const [showMobileChat, setShowMobileChat] = useState(false);
     const scrollRef = useRef<HTMLDivElement>(null);
 
+    // Auto-scroll logic
     useEffect(() => {
         if (scrollRef.current) {
             scrollRef.current.scrollTop = scrollRef.current.scrollHeight;
         }
-    }, [messages]);
+    }, [messages, activePartnerId]);
 
     const activePartner = partners.find(p => p.id === activePartnerId) || partners[0];
+    const currentMessages = activePartnerId ? messages[activePartnerId] || [] : [];
 
     const handleSend = useCallback(() => {
-        if (!inputValue.trim()) return;
-
-        const newMessage: Message = {
-            id: Date.now().toString(),
-            senderId: "me",
-            content: inputValue,
-            timestamp: new Date(),
-        };
-
-        setMessages((prev) => [...prev, newMessage]);
+        if (!inputValue.trim() || !activePartnerId) return;
+        sendMessage(activePartnerId, inputValue);
         setInputValue("");
-    }, [inputValue]);
+    }, [inputValue, activePartnerId, sendMessage]);
 
     const handleSelectPartner = useCallback((id: string) => {
-        setActivePartnerId(id);
+        setActivePartner(id);
         setShowMobileChat(true);
-    }, []);
+    }, [setActivePartner]);
+
+    if (!activePartner) return null;
 
     return (
         <Layout>
@@ -165,7 +106,7 @@ const Chat = () => {
                         className="flex-1 overflow-y-auto p-4 md:p-6 space-y-4 scrollbar-hide"
                     >
                         <AnimatePresence initial={false}>
-                            {messages.map((message) => (
+                            {currentMessages.map((message) => (
                                 <motion.div
                                     key={message.id}
                                     initial={{ opacity: 0, scale: 0.95, y: 10 }}
@@ -184,7 +125,7 @@ const Chat = () => {
                                         {message.content}
                                     </div>
                                     <span className="text-[9px] text-muted-foreground mt-1 px-1">
-                                        {message.timestamp.toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+                                        {new Date(message.timestamp).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
                                     </span>
                                 </motion.div>
                             ))}

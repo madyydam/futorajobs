@@ -1,218 +1,186 @@
 import { Layout } from "@/components/layout/Layout";
 import { motion } from "framer-motion";
-import { Zap, Search, Filter, Plus, LayoutDashboard, MessageSquare } from "lucide-react";
+import {
+    Zap,
+    Search,
+    Filter,
+    Plus,
+    MessageSquare,
+    Sparkles,
+    TrendingUp,
+    ShieldCheck,
+    ArrowRight,
+    Rocket,
+    Globe,
+    Code,
+    Palette,
+    Terminal,
+    Video,
+    Briefcase
+} from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { CategoryCard } from "@/components/marketplace/CategoryCard";
 import { ServiceCard } from "@/components/marketplace/ServiceCard";
 import { Link } from "react-router-dom";
-import { FreelanceCategory, FreelanceService } from "@/types/marketplace";
-
-const MOCK_CATEGORIES: FreelanceCategory[] = [
-    { id: "1", name: "UI/UX Design", slug: "ui-ux", icon: "Palette", description: "Visual and interactive design for digital products." },
-    { id: "2", name: "Frontend Dev", slug: "frontend", icon: "Code", description: "Building responsive and interactive user interfaces." },
-    { id: "3", name: "Backend Dev", slug: "backend", icon: "Database", description: "Server-side logic and database management." },
-    { id: "4", name: "AI Training", slug: "ai", icon: "Bot", description: "Specialized AI model training and expert prompting." },
-    { id: "5", name: "Content Writing", slug: "content", icon: "FileText", description: "Professional writing and SEO-optimized content." },
-    { id: "6", name: "Video Editing", slug: "video", icon: "Video", description: "High-impact video production and post-processing." },
-];
-
-const MOCK_SERVICES: FreelanceService[] = [
-    {
-        id: "s1",
-        freelancer_id: "f1",
-        category_id: "1",
-        title: "High-Fidelity Mobile App Design for Startups",
-        description: "I will design a modern, conversion-focused mobile app for your startup.",
-        price_type: "fixed",
-        price: 12000,
-        delivery_time: "5 Days",
-        portfolio_urls: ["https://images.unsplash.com/photo-1551650975-87deedd944c3?w=800&auto=format&fit=crop"],
-        tags: ["Mobile", "Figma", "UI/UX"],
-        is_active: true,
-        freelancer: {
-            id: "f1",
-            user_id: "u1",
-            tagline: "Product Designer @ Futora",
-            bio: "Experienced UI/UX designer specialized in SaaS.",
-            hourly_rate: 1500,
-            experience_years: 4,
-            is_verified: true,
-            full_name: "Rahul Sharma",
-            avatar_url: "https://i.pravatar.cc/150?u=rahul"
-        },
-        category: MOCK_CATEGORIES[0]
-    },
-    {
-        id: "s2",
-        freelancer_id: "f2",
-        category_id: "2",
-        title: "Next.js + Tailwind CSS SaaS Landing Page",
-        description: "Highly performant and SEO optimized landing pages built with modern stack.",
-        price_type: "fixed",
-        price: 8500,
-        delivery_time: "3 Days",
-        portfolio_urls: ["https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=800&auto=format&fit=crop"],
-        tags: ["Next.js", "Tailwind", "React"],
-        is_active: true,
-        freelancer: {
-            id: "f2",
-            user_id: "u2",
-            tagline: "Fullstack Wizard",
-            bio: "Building the future with React and Node.",
-            hourly_rate: 2000,
-            experience_years: 3,
-            is_verified: true,
-            full_name: "Priya Das",
-            avatar_url: "https://i.pravatar.cc/150?u=priya"
-        },
-        category: MOCK_CATEGORIES[1]
-    },
-    {
-        id: "s3",
-        freelancer_id: "f3",
-        category_id: "4",
-        title: "Advanced Prompt Engineering for LLMs",
-        description: "Optimize your AI workflows with custom engineered prompts for GPT-4 and Claude.",
-        price_type: "hourly",
-        price: 2500,
-        delivery_time: "1 Day",
-        portfolio_urls: ["https://images.unsplash.com/photo-1677442136019-21780ecad995?w=800&auto=format&fit=crop"],
-        tags: ["AI", "LLM", "Prompts"],
-        is_active: true,
-        freelancer: {
-            id: "f3",
-            user_id: "u3",
-            tagline: "AI Solutions Architect",
-            bio: "Specialist in integrating AI into existing business processes.",
-            hourly_rate: 2500,
-            experience_years: 2,
-            is_verified: true,
-            full_name: "Amit Patel",
-            avatar_url: "https://i.pravatar.cc/150?u=amit"
-        },
-        category: MOCK_CATEGORIES[3]
-    }
-];
+import { useState, useMemo } from "react";
+import { useFreelance } from "@/hooks/useFreelance";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Freelancing = () => {
+    const [searchQuery, setSearchQuery] = useState("");
+    const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
+    const { services, categories, freelancerProfile } = useFreelance();
+
+    const filteredServices = useMemo(() => {
+        let items = services.data || [];
+        if (searchQuery) {
+            items = items.filter(s =>
+                s.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                s.description.toLowerCase().includes(searchQuery.toLowerCase())
+            );
+        }
+        if (selectedCategory) {
+            items = items.filter(s => s.category_id === selectedCategory || s.category?.slug === selectedCategory);
+        }
+        return items;
+    }, [services.data, searchQuery, selectedCategory]);
+
     return (
         <Layout>
-            <div className="max-w-7xl mx-auto py-12 px-6">
-                {/* Header Section */}
-                <div className="flex flex-col md:flex-row md:items-end justify-between gap-8 mb-12">
-                    <motion.div
-                        initial={{ opacity: 0, x: -20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                    >
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-[10px] font-bold uppercase tracking-widest mb-4">
-                            <Zap className="h-3 w-3" />
-                            Active Marketplace
-                        </div>
-                        <h1 className="text-4xl md:text-6xl font-black text-white tracking-tighter italic uppercase mb-2">
-                            FUTORA <span className="text-primary/40">GIGS</span>
-                        </h1>
-                        <p className="text-muted-foreground max-w-xl font-medium">
-                            The specialized engine for startup talent. Hire top-tier freelancers or monetize your skills.
-                        </p>
-                    </motion.div>
+            <div className="relative min-h-screen pb-20 overflow-x-hidden">
+                {/* Premium Background Elements */}
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[800px] bg-primary/5 blur-[120px] -z-10 rounded-full opacity-50" />
+                <div className="absolute top-[10%] right-[-10%] w-[500px] h-[500px] bg-blue-500/5 blur-[100px] -z-10 rounded-full" />
 
-                    <motion.div
-                        initial={{ opacity: 0, x: 20 }}
-                        animate={{ opacity: 1, x: 0 }}
-                        className="flex flex-wrap gap-3"
-                    >
-                        <div className="flex bg-white/5 p-1 rounded-2xl border border-white/10 mr-2">
-                            <Button asChild variant="ghost" className="rounded-xl font-bold text-[10px] h-10 px-4 data-[active=true]:bg-primary data-[active=true]:text-black" data-active="true">
-                                <Link to="/freelancing/dashboard">FREELANCER</Link>
+                <div className="max-w-7xl mx-auto px-6 pt-12">
+                    {/* Elite Header */}
+                    <div className="flex flex-col lg:flex-row lg:items-end justify-between gap-10 mb-16 relative">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            animate={{ opacity: 1, x: 0 }}
+                            className="space-y-6 max-w-2xl"
+                        >
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-[0.2em] uppercase">
+                                <Sparkles className="h-4 w-4" />
+                                Student Freelance Network
+                            </div>
+                            <h1 className="text-6xl md:text-8xl font-black text-foreground tracking-tighter leading-[0.85] italic uppercase">
+                                FUTORA <span className="text-primary/40 dark:text-primary/20 block md:inline">GIGS</span>
+                            </h1>
+                            <p className="text-muted-foreground text-xl font-medium leading-relaxed max-w-lg">
+                                The elite marketplace for student builders. Hire top-tier student talent or launch your professional career.
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="flex flex-wrap items-center gap-4"
+                        >
+                            <div className="flex bg-card backdrop-blur-xl p-1.5 rounded-[2rem] border border-border shadow-2xl">
+                                <Button asChild variant="ghost" className="rounded-[1.5rem] font-black text-xs h-12 px-8 hover:bg-white/5 data-[active=true]:bg-white/10">
+                                    <Link to="/freelancing/dashboard">DASHBOARD</Link>
+                                </Button>
+                                <Button asChild variant="ghost" className="rounded-[1.5rem] font-black text-xs h-12 px-8 hover:bg-white/5">
+                                    <Link to="/freelancing/client-dashboard">ORDERS</Link>
+                                </Button>
+                            </div>
+                            <Button asChild className="h-16 rounded-[2rem] bg-primary text-black hover:bg-primary/90 font-black px-10 shadow-2xl shadow-primary/20 border-t border-white/20 active:scale-95 transition-all">
+                                <Link to="/freelancing/create">
+                                    <Plus className="h-5 w-5 mr-3 stroke-[3px]" />
+                                    POST A GIG
+                                </Link>
                             </Button>
-                            <Button asChild variant="ghost" className="rounded-xl font-bold text-[10px] h-10 px-4 data-[active=false]:bg-primary data-[active=false]:text-black">
-                                <Link to="/freelancing/client-dashboard">CLIENT</Link>
+                        </motion.div>
+                    </div>
+
+                    {/* Elite Search & Filter Bar */}
+                    <div className="relative z-10 mb-24">
+                        <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-blue-600/30 rounded-[3rem] blur-xl opacity-30 animate-pulse" />
+                        <div className="relative flex flex-col md:flex-row gap-4 p-5 bg-card/80 backdrop-blur-3xl border border-border rounded-[3rem] shadow-2xl">
+                            <div className="relative flex-1">
+                                <Search className="absolute left-7 top-1/2 -translate-y-1/2 h-6 w-6 text-primary" />
+                                <Input
+                                    value={searchQuery}
+                                    onChange={(e) => setSearchQuery(e.target.value)}
+                                    placeholder="Search for 'Next.js Dev', 'UI Designer', 'AI Expert'..."
+                                    className="h-16 pl-16 pr-8 bg-background border-border rounded-[2rem] focus:border-primary/50 transition-all font-bold text-lg placeholder:text-muted-foreground/30 text-foreground"
+                                />
+                            </div>
+                            <Button className="h-16 px-12 rounded-[2rem] bg-primary text-primary-foreground hover:opacity-90 font-black shadow-xl tracking-widest italic active:scale-95 transition-all">
+                                SEARCH
                             </Button>
                         </div>
-                        <Button asChild variant="outline" className="rounded-xl border-white/10 bg-white/5 hover:bg-white/10 font-bold">
-                            <Link to="/chat">
-                                <MessageSquare className="h-4 w-4 mr-2" />
-                                MESSAGES
-                            </Link>
-                        </Button>
-                        <Button asChild className="rounded-xl bg-primary text-black hover:bg-primary/90 font-bold">
-                            <Link to="/freelancing/create">
-                                <Plus className="h-4 w-4 mr-2" />
-                                POST A GIG
-                            </Link>
-                        </Button>
-                    </motion.div>
+                    </div>
 
-                </div>
+                    {/* Elite Categories */}
+                    <section className="mb-24">
+                        <div className="flex items-center justify-between mb-12 px-2">
+                            <div className="flex items-center gap-4">
+                                <div className="h-12 w-1.5 bg-primary rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
+                                <h2 className="text-4xl font-black italic uppercase tracking-tighter text-foreground">Elite Domains</h2>
+                            </div>
+                            <div className="hidden md:block h-px flex-1 mx-12 bg-gradient-to-r from-white/10 to-transparent"></div>
+                            <Button variant="ghost" className="text-primary font-black text-xs tracking-widest uppercase hover:bg-primary/10 rounded-full px-6">
+                                VIEW ALL <ArrowRight className="ml-2 h-4 w-4" />
+                            </Button>
+                        </div>
 
-                {/* Search & Filter Bar */}
-                <div className="flex flex-col md:flex-row gap-4 mb-16">
-                    <div className="relative flex-1">
-                        <Search className="absolute left-4 top-1/2 -translate-y-1/2 h-5 w-5 text-muted-foreground" />
-                        <Input
-                            placeholder="What service are you looking for today?"
-                            className="h-14 pl-12 bg-white/5 border-white/10 rounded-2xl focus:border-primary/50 transition-all font-medium"
-                        />
-                    </div>
-                    <Button variant="outline" className="h-14 px-6 rounded-2xl border-white/10 bg-white/5 hover:bg-white/10 font-bold">
-                        <Filter className="h-5 w-5 mr-2 text-primary" />
-                        FILTERS
-                    </Button>
-                </div>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+                            {categories.isLoading ? (
+                                Array(6).fill(0).map((_, i) => (
+                                    <Skeleton key={i} className="h-40 rounded-[2.5rem] bg-muted" />
+                                ))
+                            ) : (
+                                categories.data?.map((cat) => (
+                                    <CategoryCard
+                                        key={cat.id}
+                                        category={cat}
+                                        isActive={selectedCategory === cat.slug}
+                                        onClick={() => setSelectedCategory(selectedCategory === cat.slug ? null : cat.slug)}
+                                    />
+                                ))
+                            )}
+                        </div>
+                    </section>
 
-                {/* Categories Grid */}
-                <section className="mb-20">
-                    <div className="flex items-center justify-between mb-8">
-                        <h2 className="text-2xl font-black italic uppercase tracking-tighter text-white">Categories</h2>
-                        <div className="h-px flex-1 mx-8 bg-white/5"></div>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                        {MOCK_CATEGORIES.map((cat) => (
-                            <CategoryCard key={cat.id} category={cat} />
-                        ))}
-                    </div>
-                </section>
+                    {/* Featured Services */}
+                    <section className="mb-32">
+                        <div className="flex items-center justify-between mb-12 px-2">
+                            <div className="flex items-center gap-4">
+                                <div className="h-12 w-1.5 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
+                                <h2 className="text-4xl font-black italic uppercase tracking-tighter text-foreground">Verified Gigs</h2>
+                            </div>
+                            <div className="hidden md:block h-px flex-1 mx-12 bg-gradient-to-r from-white/10 to-transparent"></div>
+                            <div className="flex items-center gap-2">
+                                <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest mr-4">Sorted by: Newest</span>
+                                <Button variant="outline" size="icon" className="rounded-xl border-border h-10 w-10">
+                                    <Filter className="h-4 w-4" />
+                                </Button>
+                            </div>
+                        </div>
 
-                {/* Featured Services */}
-                <section>
-                    <div className="flex items-center justify-between mb-8">
-                        <h2 className="text-2xl font-black italic uppercase tracking-tighter text-white">Featured Gigs</h2>
-                        <div className="h-px flex-1 mx-8 bg-white/5"></div>
-                        <Link to="/freelancing/explore" className="text-xs font-bold text-primary uppercase tracking-widest hover:underline">View All</Link>
-                    </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-                        {MOCK_SERVICES.map((service) => (
-                            <ServiceCard key={service.id} service={service} />
-                        ))}
-                    </div>
-                </section>
-
-                {/* Trust/Info Section */}
-                <div className="mt-24 p-12 rounded-[40px] bg-gradient-to-br from-primary/10 via-transparent to-transparent border border-primary/20 relative overflow-hidden">
-                    <div className="absolute top-0 right-0 p-12 opacity-10">
-                        <Zap className="h-48 w-48 text-primary" />
-                    </div>
-                    <div className="relative z-10 max-w-2xl">
-                        <h2 className="text-3xl md:text-4xl font-black text-white italic uppercase tracking-tighter mb-6">
-                            WHY HIRE ON <span className="text-primary">FUTORA?</span>
-                        </h2>
-                        <div className="space-y-4">
-                            {[
-                                "Verified Proof-of-Work profiles",
-                                "Direct messaging with talent",
-                                "Escrow-based secure payments (Coming Soon)",
-                                "Zero commissions for the first 100 startups"
-                            ].map((item, i) => (
-                                <div key={i} className="flex items-center gap-3">
-                                    <div className="h-5 w-5 rounded-full bg-primary/20 flex items-center justify-center">
-                                        <Zap className="h-3 w-3 text-primary" />
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8">
+                            {services.isLoading ? (
+                                Array(8).fill(0).map((_, i) => (
+                                    <Skeleton key={i} className="h-[450px] rounded-[2rem] bg-muted" />
+                                ))
+                            ) : filteredServices.length > 0 ? (
+                                filteredServices.map((service, index) => (
+                                    <ServiceCard key={service.id} service={service} index={index} />
+                                ))
+                            ) : (
+                                <div className="col-span-full py-20 text-center">
+                                    <div className="h-24 w-24 bg-card rounded-full flex items-center justify-center mx-auto mb-6 border border-border">
+                                        <Briefcase className="h-10 w-10 text-muted-foreground/30" />
                                     </div>
-                                    <span className="text-white/80 font-medium">{item}</span>
+                                    <h3 className="text-2xl font-black text-foreground italic uppercase tracking-tighter mb-2">No Gigs Found</h3>
+                                    <p className="text-muted-foreground font-medium italic">Try adjusting your search or filters to find what you're looking for.</p>
                                 </div>
-                            ))}
+                            )}
                         </div>
-                    </div>
+                    </section>
                 </div>
             </div>
         </Layout>
@@ -220,4 +188,3 @@ const Freelancing = () => {
 };
 
 export default Freelancing;
-

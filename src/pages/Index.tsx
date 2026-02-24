@@ -71,11 +71,12 @@ const Index = () => {
               <Button
                 size="sm"
                 className="flex-1 max-w-[160px] bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] md:text-sm px-2 md:px-4 py-3 group h-auto rounded-xl"
-                onClick={() => scrollToSection('courses-section')}
+                onClick={() => navigate('/learning')}
               >
                 <BookOpen className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 flex-shrink-0" />
-                <span className="whitespace-nowrap">Start Learning</span>
+                <span className="whitespace-nowrap">Video Hub</span>
               </Button>
+
               <Button
                 variant="outline"
                 size="sm"

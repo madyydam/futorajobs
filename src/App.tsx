@@ -9,43 +9,50 @@ import { Loader2 } from "lucide-react";
 import { AdminRoute } from "./components/admin/AdminRoute";
 
 // Lazy load pages
-const Index = lazy(() => import("./pages/Index"));
-const JobsPage = lazy(() => import("./pages/JobsPage"));
-const InternshipsPage = lazy(() => import("./pages/InternshipsPage"));
-const ApplyPage = lazy(() => import("./pages/ApplyPage"));
-const PostPage = lazy(() => import("./pages/PostPage"));
-const ProfilePage = lazy(() => import("./pages/ProfilePage"));
-const CourseDetailPage = lazy(() => import("./pages/CourseDetailPage"));
-const CoursesPage = lazy(() => import("./pages/CoursesPage"));
-const CareerPathsPage = lazy(() => import("./pages/CareerPathsPage"));
-const NotFound = lazy(() => import("./pages/NotFound"));
-const AuthPage = lazy(() => import("./pages/AuthPage"));
-const CareerPathPage = lazy(() => import("./pages/CareerPathPage"));
-const PuneJobs = lazy(() => import("./pages/PuneJobs"));
-const PuneInternships = lazy(() => import("./pages/PuneInternships"));
-const FounderPage = lazy(() => import("./pages/FounderPage"));
-const InterviewCoach = lazy(() => import("./pages/InterviewCoach"));
-const ChatPage = lazy(() => import("./pages/Chat"));
-const FreelancingPage = lazy(() => import("./pages/Freelancing"));
+const Index = lazy(() => import("@/pages/Index"));
+const JobsPage = lazy(() => import("@/pages/JobsPage"));
+const InternshipsPage = lazy(() => import("@/pages/InternshipsPage"));
+const ApplyPage = lazy(() => import("@/pages/ApplyPage"));
+const PostPage = lazy(() => import("@/pages/PostPage"));
+const ProfilePage = lazy(() => import("@/pages/ProfilePage"));
+const CourseDetailPage = lazy(() => import("@/pages/CourseDetailPage"));
+const CoursesPage = lazy(() => import("@/pages/CoursesPage"));
+const CareerPathsPage = lazy(() => import("@/pages/CareerPathsPage"));
+const NotFound = lazy(() => import("@/pages/NotFound"));
+const AuthPage = lazy(() => import("@/pages/AuthPage"));
+const CareerPathPage = lazy(() => import("@/pages/CareerPathPage"));
+const PuneJobs = lazy(() => import("@/pages/PuneJobs"));
+const PuneInternships = lazy(() => import("@/pages/PuneInternships"));
+const FounderPage = lazy(() => import("@/pages/FounderPage"));
+const InterviewCoach = lazy(() => import("@/pages/InterviewCoach"));
+const ChatPage = lazy(() => import("@/pages/Chat"));
+const InterviewFeedback = lazy(() => import("@/pages/InterviewFeedback"));
+
 // Marketplace
-const CreateService = lazy(() => import("./pages/marketplace/CreateService"));
-const FreelancerDashboard = lazy(() => import("./pages/marketplace/FreelancerDashboard"));
-const ClientDashboard = lazy(() => import("./pages/marketplace/ClientDashboard"));
-const CategoryPage = lazy(() => import("./pages/marketplace/CategoryPage"));
+const FreelancingPage = lazy(() => import("@/pages/Freelancing"));
+const CreateService = lazy(() => import("@/pages/marketplace/CreateService"));
+const FreelancerDashboard = lazy(() => import("@/pages/marketplace/FreelancerDashboard"));
+const ClientDashboard = lazy(() => import("@/pages/marketplace/ClientDashboard"));
+const AICopilotPage = lazy(() => import("@/pages/AICopilot"));
+const RecruiterDashboard = lazy(() => import("@/pages/RecruiterDashboard"));
+const PublicPortfolio = lazy(() => import("@/pages/Portfolio"));
+const EventsPage = lazy(() => import("@/pages/EventsPage"));
+const CategoryPage = lazy(() => import("@/pages/marketplace/CategoryPage"));
+const ServicePage = lazy(() => import("@/pages/marketplace/ServicePage"));
 
-const MarketplaceExplore = lazy(() => import("./pages/Freelancing"));
-
-
+const VideoHub = lazy(() => import("@/pages/learning/VideoHub"));
+const CoursePlayer = lazy(() => import("@/pages/learning/CoursePlayer"));
 
 // Admin pages
-const AdminDashboard = lazy(() => import("./pages/admin/Dashboard"));
-const AdminUserManagement = lazy(() => import("./pages/admin/UserManagement"));
-const AdminLogin = lazy(() => import("./pages/admin/AdminLogin"));
-const LearningGovernance = lazy(() => import("./pages/admin/LearningGovernance"));
-const CareerOS = lazy(() => import("./pages/admin/CareerOS"));
-const JobManagement = lazy(() => import("./pages/admin/JobManagement"));
-const InternshipControl = lazy(() => import("./pages/admin/InternshipControl"));
-const SystemSettings = lazy(() => import("./pages/admin/SystemSettings"));
+const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
+const AdminUserManagement = lazy(() => import("@/pages/admin/UserManagement"));
+const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
+const StartupCommunity = lazy(() => import("@/pages/StartupCommunity"));
+const LearningGovernance = lazy(() => import("@/pages/admin/LearningGovernance"));
+const CareerOS = lazy(() => import("@/pages/admin/CareerOS"));
+const JobManagement = lazy(() => import("@/pages/admin/JobManagement"));
+const InternshipControl = lazy(() => import("@/pages/admin/InternshipControl"));
+const SystemSettings = lazy(() => import("@/pages/admin/SystemSettings"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -61,6 +68,8 @@ const LoadingFallback = () => (
     <Loader2 className="h-8 w-8 animate-spin text-primary" />
   </div>
 );
+
+const VirtualInternship = lazy(() => import("@/pages/VirtualInternship"));
 
 const App = () => (
   <QueryClientProvider client={queryClient}>
@@ -155,13 +164,24 @@ const App = () => (
               <Route path="/post" element={<PostPage />} />
               <Route path="/post-job" element={<PostPage />} />
               <Route path="/profile" element={<ProfilePage />} />
+              <Route path="/community" element={<StartupCommunity />} />
               <Route path="/interview-coach" element={<InterviewCoach />} />
               <Route path="/chat" element={<ChatPage />} />
+              <Route path="/interview-feedback/:sessionId" element={<InterviewFeedback />} />
+              <Route path="/learning" element={<VideoHub />} />
+              <Route path="/learning/video/:courseId" element={<CoursePlayer />} />
+              <Route path="/ai-copilot" element={<AICopilotPage />} />
+              <Route path="/recruiter" element={<RecruiterDashboard />} />
+              <Route path="/events" element={<EventsPage />} />
+              <Route path="/portfolio/:id" element={<PublicPortfolio />} />
               <Route path="/freelancing" element={<FreelancingPage />} />
               <Route path="/freelancing/create" element={<CreateService />} />
               <Route path="/freelancing/dashboard" element={<FreelancerDashboard />} />
               <Route path="/freelancing/client-dashboard" element={<ClientDashboard />} />
-              <Route path="/freelancing/category/:categorySlug" element={<CategoryPage />} />
+              <Route path="/freelancing/category/:slug" element={<CategoryPage />} />
+              <Route path="/freelancing/service/:id" element={<ServicePage />} />
+              <Route path="/virtual-internship/:id" element={<VirtualInternship />} />
+
 
               {/* ADD ALL CUSTOM ROUTES ABOVE THE CATCH-ALL "*" ROUTE */}
 

@@ -19,6 +19,8 @@ export interface InternshipCardData {
   min_readiness_score: number;
   readiness_score?: number;
   is_unlocked?: boolean;
+  is_virtual?: boolean;
+  tasks?: any[];
 }
 
 interface InternshipCardProps {
@@ -30,19 +32,20 @@ interface InternshipCardProps {
 export function InternshipCard({ internship, index = 0, showReadiness = true }: InternshipCardProps) {
   const isUnlocked = internship.is_unlocked;
   const readinessScore = internship.readiness_score ?? 0;
+  const isVirtual = internship.is_virtual;
 
   return (
     <motion.div
       className={cn(
         "clean-card p-6 group cursor-pointer hover-lift relative overflow-hidden",
-        !isUnlocked && "opacity-75"
+        !isUnlocked && !isVirtual && "opacity-75"
       )}
       initial={{ opacity: 0, y: 20 }}
       animate={{ opacity: 1, y: 0 }}
       transition={{ duration: 0.4, delay: index * 0.05 }}
     >
       {/* Lock Overlay */}
-      {!isUnlocked && (
+      {!isUnlocked && !isVirtual && (
         <div className="absolute inset-0 bg-background/50 backdrop-blur-[1px] z-10 flex items-center justify-center">
           <div className="text-center p-4">
             <Lock className="w-8 h-8 text-muted-foreground mx-auto mb-2" />
@@ -57,15 +60,22 @@ export function InternshipCard({ internship, index = 0, showReadiness = true }: 
         {/* Header */}
         <div className="flex items-start justify-between gap-4">
           <div className="flex-1">
-            <div className="flex items-center gap-2 mb-1">
+            <div className="flex items-center gap-2 mb-1 flex-wrap">
               <h3 className="text-lg font-semibold text-foreground group-hover:text-primary transition-colors">
                 {internship.title}
               </h3>
-              {internship.is_remote && (
-                <span className="inline-flex items-center px-2 py-0.5 text-[10px] font-medium rounded-full bg-primary/10 text-primary">
-                  Remote
-                </span>
-              )}
+              <div className="flex gap-1">
+                {internship.is_remote && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded-full bg-primary/10 text-primary">
+                    Remote
+                  </span>
+                )}
+                {isVirtual && (
+                  <span className="inline-flex items-center px-1.5 py-0.5 text-[10px] font-medium rounded-full bg-purple-500/10 text-purple-500">
+                    Virtual Task
+                  </span>
+                )}
+              </div>
             </div>
             <p className="text-sm text-muted-foreground">{internship.company}</p>
           </div>
@@ -83,16 +93,21 @@ export function InternshipCard({ internship, index = 0, showReadiness = true }: 
           </p>
         )}
 
-        {/* Category Badge */}
+        {/* Badges */}
         <div className="flex flex-wrap gap-2">
           <span className="skill-chip capitalize">{internship.category}</span>
+          {isVirtual && (
+            <span className="skill-chip bg-amber-500/10 text-amber-500 border-amber-500/20">
+              Certificate Provided
+            </span>
+          )}
         </div>
 
         {/* Meta */}
         <div className="grid grid-cols-2 gap-2 text-xs text-muted-foreground">
           <div className="flex items-center gap-1">
             <MapPin className="h-3 w-3" />
-            {internship.location || "Remote"}
+            {isVirtual ? "Virtual" : (internship.location || "Remote")}
           </div>
           {internship.duration && (
             <div className="flex items-center gap-1">
@@ -100,16 +115,10 @@ export function InternshipCard({ internship, index = 0, showReadiness = true }: 
               {internship.duration}
             </div>
           )}
-          {internship.stipend && (
-            <div className="flex items-center gap-1 col-span-2">
-              <IndianRupee className="h-3 w-3" />
-              {internship.stipend}
-            </div>
-          )}
         </div>
 
         {/* Readiness Score */}
-        {showReadiness && (
+        {showReadiness && !isVirtual && (
           <ReadinessScore
             score={readinessScore}
             minRequired={internship.min_readiness_score}
@@ -120,7 +129,7 @@ export function InternshipCard({ internship, index = 0, showReadiness = true }: 
         {/* CTA */}
         <div className="flex items-center justify-between pt-4 border-t border-border">
           <div className="flex items-center gap-1 text-xs">
-            {isUnlocked ? (
+            {(isUnlocked || isVirtual) ? (
               <>
                 <Unlock className="h-3 w-3 text-primary" />
                 <span className="text-primary font-medium">Unlocked</span>
@@ -132,19 +141,19 @@ export function InternshipCard({ internship, index = 0, showReadiness = true }: 
               </>
             )}
           </div>
-          <Link to={isUnlocked ? `/apply/internship/${internship.id}` : "#"}>
+          <Link to={(isUnlocked || isVirtual) ? (isVirtual ? `/virtual-internship/${internship.id}` : `/apply/internship/${internship.id}`) : "#"}>
             <Button
               size="sm"
-              disabled={!isUnlocked}
+              disabled={!isUnlocked && !isVirtual}
               className={cn(
                 "transition-colors group/btn",
-                isUnlocked
+                (isUnlocked || isVirtual)
                   ? "bg-primary text-primary-foreground hover:bg-primary/90"
                   : "bg-muted text-muted-foreground cursor-not-allowed"
               )}
             >
-              {isUnlocked ? "Apply" : "Locked"}
-              {isUnlocked && <ArrowRight className="h-4 w-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />}
+              {isVirtual ? "Start Tasks" : (isUnlocked ? "Apply" : "Locked")}
+              {(isUnlocked || isVirtual) && <ArrowRight className="h-4 w-4 ml-1 group-hover/btn:translate-x-1 transition-transform" />}
             </Button>
           </Link>
         </div>
