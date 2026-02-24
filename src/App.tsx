@@ -7,6 +7,7 @@ import { Suspense, lazy } from "react";
 import { ErrorBoundary } from "./components/ErrorBoundary";
 import { Loader2 } from "lucide-react";
 import { AdminRoute } from "./components/admin/AdminRoute";
+import ScrollToTop from "./components/ScrollToTop";
 
 // Lazy load pages
 const Index = lazy(() => import("@/pages/Index"));
@@ -36,23 +37,25 @@ const ClientDashboard = lazy(() => import("@/pages/marketplace/ClientDashboard")
 const AICopilotPage = lazy(() => import("@/pages/AICopilot"));
 const RecruiterDashboard = lazy(() => import("@/pages/RecruiterDashboard"));
 const PublicPortfolio = lazy(() => import("@/pages/Portfolio"));
-const EventsPage = lazy(() => import("@/pages/EventsPage"));
 const CategoryPage = lazy(() => import("@/pages/marketplace/CategoryPage"));
 const ServicePage = lazy(() => import("@/pages/marketplace/ServicePage"));
-
-const VideoHub = lazy(() => import("@/pages/learning/VideoHub"));
-const CoursePlayer = lazy(() => import("@/pages/learning/CoursePlayer"));
 
 // Admin pages
 const AdminDashboard = lazy(() => import("@/pages/admin/Dashboard"));
 const AdminUserManagement = lazy(() => import("@/pages/admin/UserManagement"));
 const AdminLogin = lazy(() => import("@/pages/admin/AdminLogin"));
+
 const StartupCommunity = lazy(() => import("@/pages/StartupCommunity"));
 const LearningGovernance = lazy(() => import("@/pages/admin/LearningGovernance"));
 const CareerOS = lazy(() => import("@/pages/admin/CareerOS"));
 const JobManagement = lazy(() => import("@/pages/admin/JobManagement"));
 const InternshipControl = lazy(() => import("@/pages/admin/InternshipControl"));
 const SystemSettings = lazy(() => import("@/pages/admin/SystemSettings"));
+
+const VideoHub = lazy(() => import("@/pages/learning/VideoHub"));
+const CategoryDetail = lazy(() => import("@/pages/learning/CategoryDetail"));
+const SubCategoryVideos = lazy(() => import("@/pages/learning/SubCategoryVideos"));
+const CoursePlayer = lazy(() => import("@/pages/learning/CoursePlayer"));
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -78,6 +81,7 @@ const App = () => (
       <Sonner />
       <ErrorBoundary>
         <BrowserRouter>
+          <ScrollToTop />
           <Suspense fallback={<LoadingFallback />}>
             <Routes>
               <Route path="/" element={<Index />} />
@@ -93,7 +97,7 @@ const App = () => (
               <Route path="/jobs-in-pune" element={<PuneJobs />} />
               <Route path="/pune-internships" element={<PuneInternships />} />
               <Route path="/internships-in-pune" element={<PuneInternships />} />
-              <Route path="/futoracareer-pune" element={<Index />} />
+              <Route path="/career-pune" element={<Index />} />
 
               {/* Persona / Brand SEO */}
               <Route path="/madhur-dhadve" element={<FounderPage />} />
@@ -169,10 +173,12 @@ const App = () => (
               <Route path="/chat" element={<ChatPage />} />
               <Route path="/interview-feedback/:sessionId" element={<InterviewFeedback />} />
               <Route path="/learning" element={<VideoHub />} />
+              <Route path="/learning/:categorySlug" element={<CategoryDetail />} />
+              <Route path="/learning/:categorySlug/:subSlug" element={<SubCategoryVideos />} />
               <Route path="/learning/video/:courseId" element={<CoursePlayer />} />
               <Route path="/ai-copilot" element={<AICopilotPage />} />
               <Route path="/recruiter" element={<RecruiterDashboard />} />
-              <Route path="/events" element={<EventsPage />} />
+
               <Route path="/portfolio/:id" element={<PublicPortfolio />} />
               <Route path="/freelancing" element={<FreelancingPage />} />
               <Route path="/freelancing/create" element={<CreateService />} />

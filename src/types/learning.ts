@@ -1,9 +1,26 @@
+export type VideoSubCategory = {
+    id: string;
+    name: string;
+    image?: string;
+};
+
 export type VideoCategory = {
     id: string;
     name: string;
     slug: string;
     icon: string;
     description: string;
+    subcategories?: VideoSubCategory[];
+    color?: string; // Hex or tailwind class
+    image?: string; // Background thumbnail
+};
+
+export type VideoLesson = {
+    id: string;
+    title: string;
+    duration: string;
+    video_url: string;
+    is_completed?: boolean;
 };
 
 export type VideoCourse = {
@@ -15,13 +32,14 @@ export type VideoCourse = {
     duration: string;
     instructor_name: string;
     thumbnail_url: string;
-    video_url: string;
+    video_url: string; // Preview or lesson 1 video
     source_platform: string;
     is_external: boolean;
     total_views: number;
     rating: number;
     created_at: string;
     category?: VideoCategory;
+    lessons?: VideoLesson[];
 };
 
 export type VideoProgress = {

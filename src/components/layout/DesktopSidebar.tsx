@@ -1,23 +1,18 @@
 import { Link, useLocation } from "react-router-dom";
 import { cn } from "@/lib/utils";
 import {
-  BookOpen,
   Briefcase,
-  GraduationCap,
-  PlusCircle,
   User,
   ChevronLeft,
   ChevronRight,
   Moon,
   Sun,
   LogOut,
-  Sparkles,
   MessageSquare,
-  Zap,
   PlayCircle,
-  Globe,
-  Brain,
-  Trophy
+  GraduationCap,
+  Zap,
+  Globe
 } from "lucide-react";
 
 import { motion } from "framer-motion";
@@ -25,15 +20,11 @@ import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
 
 const navItems = [
-  { path: "/", label: "Courses", icon: BookOpen },
-  { path: "/learning", label: "Learning Hub", icon: PlayCircle },
-  { path: "/ai-copilot", label: "AI Copilot", icon: Brain },
-  { path: "/jobs", label: "Jobs", icon: Briefcase },
-  { path: "/events", label: "Events", icon: Trophy },
+  { path: "/", label: "Skills", icon: PlayCircle },
   { path: "/internships", label: "Internships", icon: GraduationCap },
+  { path: "/jobs", label: "Jobs", icon: Briefcase },
   { path: "/freelancing", label: "Freelancing", icon: Zap },
   { path: "/profile", label: "Profile", icon: User },
-  { path: "/community", label: "Startup Community", icon: Globe },
 ];
 
 interface DesktopSidebarProps {
@@ -58,7 +49,7 @@ export function DesktopSidebar({ collapsed, setCollapsed, isDark, setIsDark }: D
       <div className="flex items-center justify-between p-4 border-b border-sidebar-border h-16">
         <Link to="/" className="flex items-center gap-2 overflow-hidden">
           <div className="h-9 w-9 rounded-xl bg-primary flex items-center justify-center shrink-0">
-            <span className="text-sm font-bold text-primary-foreground">F</span>
+            <span className="text-sm font-bold text-primary-foreground">C</span>
           </div>
           {!collapsed && (
             <motion.span
@@ -66,7 +57,7 @@ export function DesktopSidebar({ collapsed, setCollapsed, isDark, setIsDark }: D
               animate={{ opacity: 1 }}
               className="text-lg font-semibold text-foreground whitespace-nowrap"
             >
-              Futora<span className="text-primary">Career</span>
+              <span className="text-primary">Career</span> OS
             </motion.span>
           )}
         </Link>
@@ -114,6 +105,17 @@ export function DesktopSidebar({ collapsed, setCollapsed, isDark, setIsDark }: D
             )}
           </button>
         )}
+
+        {/* Community Shortcut */}
+        <Link
+          to="/community"
+          className="sidebar-link w-full text-foreground hover:bg-primary/10"
+        >
+          <Globe className="h-5 w-5 shrink-0" />
+          {!collapsed && (
+            <span className="whitespace-nowrap font-bold">Community</span>
+          )}
+        </Link>
 
         {/* Chat Shortcut */}
         <Link

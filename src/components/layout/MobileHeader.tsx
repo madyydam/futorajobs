@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { Moon, Sun, LogOut, MessageSquare } from "lucide-react";
+import { Moon, Sun, LogOut, MessageSquare, Globe } from "lucide-react";
 import { motion } from "framer-motion";
 import { useAuth } from "@/hooks/useAuth";
 
@@ -20,14 +20,21 @@ export function MobileHeader({ isDark, setIsDark }: MobileHeaderProps) {
       <div className="flex items-center justify-between px-4 h-full">
         <Link to="/" className="flex items-center gap-2">
           <div className="h-8 w-8 rounded-lg bg-primary flex items-center justify-center">
-            <span className="text-sm font-bold text-primary-foreground">F</span>
+            <span className="text-sm font-bold text-primary-foreground">C</span>
           </div>
           <span className="text-lg font-semibold text-foreground">
-            Futora<span className="text-primary">Career</span>
+            <span className="text-primary">Career</span> OS
           </span>
         </Link>
 
         <div className="flex items-center gap-1">
+          <Link
+            to="/community"
+            className="p-2 rounded-lg hover:bg-accent transition-colors text-foreground"
+          >
+            <Globe className="h-5 w-5" />
+          </Link>
+
           <Link
             to="/chat"
             className="p-2 rounded-lg hover:bg-accent transition-colors text-foreground"

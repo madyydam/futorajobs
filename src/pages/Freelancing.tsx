@@ -61,34 +61,34 @@ const Freelancing = () => {
                             animate={{ opacity: 1, x: 0 }}
                             className="space-y-6 max-w-2xl"
                         >
-                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-[0.2em] uppercase">
-                                <Sparkles className="h-4 w-4" />
+                            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-[10px] font-bold uppercase tracking-widest">
+                                <Sparkles className="h-3.5 w-3.5" />
                                 Student Freelance Network
                             </div>
-                            <h1 className="text-6xl md:text-8xl font-black text-foreground tracking-tighter leading-[0.85] italic uppercase">
-                                FUTORA <span className="text-primary/40 dark:text-primary/20 block md:inline">GIGS</span>
+                            <h1 className="text-4xl md:text-6xl font-black text-foreground tracking-tighter leading-none uppercase">
+                                FUTORA <span className="text-primary block md:inline">GIGS</span>
                             </h1>
-                            <p className="text-muted-foreground text-xl font-medium leading-relaxed max-w-lg">
-                                The elite marketplace for student builders. Hire top-tier student talent or launch your professional career.
+                            <p className="text-muted-foreground text-sm md:text-lg font-medium leading-relaxed max-w-lg">
+                                The elite marketplace for student builders. Hire top-tier talent or launch your professional career.
                             </p>
                         </motion.div>
 
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="flex flex-wrap items-center gap-4"
+                            className="flex flex-col sm:flex-row items-stretch sm:items-center gap-3 w-full lg:w-auto"
                         >
-                            <div className="flex bg-card backdrop-blur-xl p-1.5 rounded-[2rem] border border-border shadow-2xl">
-                                <Button asChild variant="ghost" className="rounded-[1.5rem] font-black text-xs h-12 px-8 hover:bg-white/5 data-[active=true]:bg-white/10">
+                            <div className="flex bg-card/50 backdrop-blur-xl p-1 rounded-2xl border border-border">
+                                <Button asChild variant="ghost" className="flex-1 sm:flex-none rounded-xl font-bold text-[10px] h-10 px-6 hover:bg-primary/10">
                                     <Link to="/freelancing/dashboard">DASHBOARD</Link>
                                 </Button>
-                                <Button asChild variant="ghost" className="rounded-[1.5rem] font-black text-xs h-12 px-8 hover:bg-white/5">
+                                <Button asChild variant="ghost" className="flex-1 sm:flex-none rounded-xl font-bold text-[10px] h-10 px-6 hover:bg-primary/10">
                                     <Link to="/freelancing/client-dashboard">ORDERS</Link>
                                 </Button>
                             </div>
-                            <Button asChild className="h-16 rounded-[2rem] bg-primary text-black hover:bg-primary/90 font-black px-10 shadow-2xl shadow-primary/20 border-t border-white/20 active:scale-95 transition-all">
+                            <Button asChild className="h-12 rounded-2xl bg-primary text-black hover:bg-primary/90 font-black px-8 shadow-lg shadow-primary/20 active:scale-95 transition-all">
                                 <Link to="/freelancing/create">
-                                    <Plus className="h-5 w-5 mr-3 stroke-[3px]" />
+                                    <Plus className="h-4 w-4 mr-2 stroke-[3px]" />
                                     POST A GIG
                                 </Link>
                             </Button>
@@ -96,34 +96,32 @@ const Freelancing = () => {
                     </div>
 
                     {/* Elite Search & Filter Bar */}
-                    <div className="relative z-10 mb-24">
-                        <div className="absolute -inset-1 bg-gradient-to-r from-primary/30 to-blue-600/30 rounded-[3rem] blur-xl opacity-30 animate-pulse" />
-                        <div className="relative flex flex-col md:flex-row gap-4 p-5 bg-card/80 backdrop-blur-3xl border border-border rounded-[3rem] shadow-2xl">
+                    <div className="relative z-10 mb-16">
+                        <div className="relative flex flex-col md:flex-row gap-3 p-3 bg-card/50 backdrop-blur-3xl border border-border rounded-3xl shadow-xl">
                             <div className="relative flex-1">
-                                <Search className="absolute left-7 top-1/2 -translate-y-1/2 h-6 w-6 text-primary" />
+                                <Search className="absolute left-5 top-1/2 -translate-y-1/2 h-5 w-5 text-primary" />
                                 <Input
                                     value={searchQuery}
                                     onChange={(e) => setSearchQuery(e.target.value)}
-                                    placeholder="Search for 'Next.js Dev', 'UI Designer', 'AI Expert'..."
-                                    className="h-16 pl-16 pr-8 bg-background border-border rounded-[2rem] focus:border-primary/50 transition-all font-bold text-lg placeholder:text-muted-foreground/30 text-foreground"
+                                    placeholder="Search gigs..."
+                                    className="h-12 pl-12 pr-6 bg-background/50 border-border rounded-xl focus:ring-1 focus:ring-primary/50 transition-all font-medium text-sm placeholder:text-muted-foreground/50 text-foreground"
                                 />
                             </div>
-                            <Button className="h-16 px-12 rounded-[2rem] bg-primary text-primary-foreground hover:opacity-90 font-black shadow-xl tracking-widest italic active:scale-95 transition-all">
+                            <Button className="h-12 px-8 rounded-xl bg-primary text-primary-foreground hover:opacity-90 font-bold tracking-wider text-xs active:scale-95 transition-all">
                                 SEARCH
                             </Button>
                         </div>
                     </div>
 
                     {/* Elite Categories */}
-                    <section className="mb-24">
-                        <div className="flex items-center justify-between mb-12 px-2">
-                            <div className="flex items-center gap-4">
-                                <div className="h-12 w-1.5 bg-primary rounded-full shadow-[0_0_15px_rgba(16,185,129,0.5)]" />
-                                <h2 className="text-4xl font-black italic uppercase tracking-tighter text-foreground">Elite Domains</h2>
+                    <section className="mb-16">
+                        <div className="flex items-center justify-between mb-8 px-2">
+                            <div className="flex items-center gap-3">
+                                <div className="h-8 w-1 bg-primary rounded-full shadow-[0_0_10px_rgba(16,185,129,0.5)]" />
+                                <h2 className="text-xl font-bold uppercase tracking-tight text-foreground">Elite Domains</h2>
                             </div>
-                            <div className="hidden md:block h-px flex-1 mx-12 bg-gradient-to-r from-white/10 to-transparent"></div>
-                            <Button variant="ghost" className="text-primary font-black text-xs tracking-widest uppercase hover:bg-primary/10 rounded-full px-6">
-                                VIEW ALL <ArrowRight className="ml-2 h-4 w-4" />
+                            <Button variant="ghost" className="text-primary font-bold text-[10px] tracking-widest uppercase hover:bg-primary/10 rounded-full px-4">
+                                VIEW ALL <ArrowRight className="ml-1 h-3 w-3" />
                             </Button>
                         </div>
 
@@ -146,17 +144,15 @@ const Freelancing = () => {
                     </section>
 
                     {/* Featured Services */}
-                    <section className="mb-32">
-                        <div className="flex items-center justify-between mb-12 px-2">
-                            <div className="flex items-center gap-4">
-                                <div className="h-12 w-1.5 bg-blue-500 rounded-full shadow-[0_0_15px_rgba(59,130,246,0.5)]" />
-                                <h2 className="text-4xl font-black italic uppercase tracking-tighter text-foreground">Verified Gigs</h2>
+                    <section className="mb-24">
+                        <div className="flex items-center justify-between mb-8 px-2">
+                            <div className="flex items-center gap-3">
+                                <div className="h-8 w-1 bg-blue-500 rounded-full shadow-[0_0_10px_rgba(59,130,246,0.5)]" />
+                                <h2 className="text-xl font-bold uppercase tracking-tight text-foreground">Verified Gigs</h2>
                             </div>
-                            <div className="hidden md:block h-px flex-1 mx-12 bg-gradient-to-r from-white/10 to-transparent"></div>
                             <div className="flex items-center gap-2">
-                                <span className="text-muted-foreground text-xs font-bold uppercase tracking-widest mr-4">Sorted by: Newest</span>
-                                <Button variant="outline" size="icon" className="rounded-xl border-border h-10 w-10">
-                                    <Filter className="h-4 w-4" />
+                                <Button variant="outline" size="icon" className="rounded-xl border-border h-9 w-9">
+                                    <Filter className="h-3.5 w-3.5" />
                                 </Button>
                             </div>
                         </div>

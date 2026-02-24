@@ -36,7 +36,7 @@ const AuthRequiredView = memo(({ onNavigate }: { onNavigate: (path: string) => v
         </div>
         <h1 className="text-2xl font-bold text-foreground mb-4">Post a Role</h1>
         <p className="text-muted-foreground mb-8">
-          Sign in to FutoraCareer to find exceptional builders for your projects.
+          Sign in to Career OS to find exceptional builders for your projects.
         </p>
         <Button
           onClick={() => onNavigate("/auth")}

@@ -57,7 +57,7 @@ export const useChatStore = create<ChatState>()(
             ],
             messages: {
                 "1": [
-                    { id: "1", senderId: "1", content: "Hey! I saw your portfolio on FutoraCareer. Great stuff.", timestamp: new Date(Date.now() - 3600000).toISOString() },
+                    { id: "1", senderId: "1", content: "Hey! I saw your portfolio on Career OS. Great stuff.", timestamp: new Date(Date.now() - 3600000).toISOString() },
                     { id: "2", senderId: "me", content: "Thanks Sahil! Glad you liked it.", timestamp: new Date(Date.now() - 3000000).toISOString() },
                     { id: "3", senderId: "1", content: "The project looks promising. When can we chat?", timestamp: new Date(Date.now() - 2500000).toISOString() },
                 ],
@@ -125,7 +125,7 @@ export const useChatStore = create<ChatState>()(
             })
         }),
         {
-            name: 'futoracareer-chat-storage',
+            name: 'career-chat-storage',
         }
     )
 );

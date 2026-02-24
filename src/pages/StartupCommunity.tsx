@@ -170,16 +170,16 @@ const StartupCommunityPage = () => {
                         <motion.div
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
-                            className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-primary/10 border border-primary/20 text-primary text-xs font-black tracking-widest uppercase"
+                            className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 border border-primary/20 text-primary text-[9px] md:text-xs font-black tracking-widest uppercase"
                         >
-                            <Globe className="h-4 w-4 animate-pulse" />
+                            <Globe className="h-3 w-3 md:h-4 md:w-4 animate-pulse" />
                             Startup Ecosystem 2026
                         </motion.div>
                         <motion.h1
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.1 }}
-                            className="text-5xl md:text-7xl font-black text-white italic tracking-tighter uppercase leading-[0.85]"
+                            className="text-2xl md:text-7xl font-black text-white italic tracking-tighter uppercase leading-[0.9]"
                         >
                             Startup's <br />
                             <span className="text-primary italic">Community</span>
@@ -188,9 +188,9 @@ const StartupCommunityPage = () => {
                             initial={{ opacity: 0, y: 20 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ delay: 0.2 }}
-                            className="text-muted-foreground text-xl max-w-2xl font-medium"
+                            className="text-muted-foreground text-sm md:text-xl max-w-lg font-medium leading-normal"
                         >
-                            Join real-time startup groups, collaborate with builders, and follow legal onboarding processes to start your journey.
+                            Join real-time startup groups, collaborate with builders, and follow legal onboarding.
                         </motion.p>
                     </div>
 
@@ -202,28 +202,28 @@ const StartupCommunityPage = () => {
                             {suggestedStartup && (
                                 <section className="relative p-1 rounded-[3rem] overflow-hidden group">
                                     <div className="absolute inset-0 bg-gradient-to-br from-primary via-blue-500 to-primary/20 animate-gradient-xy opacity-20" />
-                                    <div className="relative bg-slate-900/90 backdrop-blur-3xl p-8 md:p-12 rounded-[2.9rem] border border-white/10 group-hover:border-primary/50 transition-all">
-                                        <div className="flex items-center gap-4 mb-8">
-                                            <div className="h-12 w-12 rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
-                                                <Sparkles className="h-6 w-6 text-black" />
+                                    <div className="relative bg-slate-900/90 backdrop-blur-3xl p-4 md:p-12 rounded-2xl md:rounded-[2.9rem] border border-white/10 group-hover:border-primary/50 transition-all">
+                                        <div className="flex items-center gap-3 mb-5 md:mb-8">
+                                            <div className="h-8 w-8 md:h-12 md:w-12 rounded-lg md:rounded-2xl bg-primary flex items-center justify-center shadow-lg shadow-primary/20">
+                                                <Sparkles className="h-4 w-4 md:h-6 md:w-6 text-black" />
                                             </div>
                                             <div>
-                                                <h2 className="text-2xl font-black text-white uppercase italic tracking-tighter">AI Best Match</h2>
-                                                <p className="text-xs text-primary font-bold uppercase tracking-widest">Calculated based on your {userSkills.length} skills</p>
+                                                <h2 className="text-lg md:text-2xl font-black text-white uppercase italic tracking-tighter">AI Best Match</h2>
+                                                <p className="text-[8px] md:text-xs text-primary font-bold uppercase tracking-widest text-shadow-sm">Calculated based on {userSkills.length} skills</p>
                                             </div>
                                         </div>
 
-                                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-8 border-b border-white/5 pb-8 mb-8">
-                                            <div className="space-y-2">
-                                                <div className="flex items-center gap-3">
-                                                    <h3 className="text-3xl font-black text-white">{suggestedStartup.name}</h3>
-                                                    <Badge className="bg-emerald-500 text-black font-bold border-none uppercase text-[10px]">{suggestedStartup.matchScore}% MATCH</Badge>
+                                        <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4 border-b border-white/5 pb-5 mb-5">
+                                            <div className="space-y-1 md:space-y-2">
+                                                <div className="flex items-center gap-2">
+                                                    <h3 className="text-xl md:text-3xl font-black text-white">{suggestedStartup.name}</h3>
+                                                    <Badge className="bg-emerald-500 text-black font-bold border-none uppercase text-[7px] md:text-[10px]">{suggestedStartup.matchScore}% MATCH</Badge>
                                                 </div>
-                                                <p className="text-muted-foreground text-lg">{suggestedStartup.description}</p>
+                                                <p className="text-muted-foreground text-xs md:text-lg leading-snug">{suggestedStartup.description}</p>
                                             </div>
-                                            <div className="shrink-0 text-center px-6 py-4 rounded-3xl bg-white/5 border border-white/10 w-full md:w-auto">
-                                                <p className="text-[10px] text-muted-foreground font-black uppercase tracking-widest mb-1">HIRING FOR</p>
-                                                <p className="text-white font-black italic">{suggestedStartup.hiring_roles[0]}</p>
+                                            <div className="shrink-0 text-center px-3 py-2 md:px-6 md:py-4 rounded-xl md:rounded-3xl bg-white/5 border border-white/10 w-full md:w-auto">
+                                                <p className="text-[8px] md:text-[9px] text-muted-foreground font-black uppercase tracking-widest mb-0.5">HIRING FOR</p>
+                                                <p className="text-xs md:text-base text-white font-black italic uppercase tracking-tight">{suggestedStartup.hiring_roles[0]}</p>
                                             </div>
                                         </div>
 
@@ -237,10 +237,10 @@ const StartupCommunityPage = () => {
                                             </div>
                                             <Button
                                                 onClick={() => setIsOnboarding(true)}
-                                                className="rounded-2xl h-12 px-8 bg-primary text-black font-black uppercase italic tracking-tighter group/btn"
+                                                className="rounded-xl h-10 px-6 bg-primary text-black font-black uppercase italic tracking-tighter group/btn text-[10px] md:text-sm w-full md:w-auto"
                                             >
-                                                {completedSteps.length === 4 ? "LEGAL VERIFIED ✅" : "START LEGAL ONBOARDING"}
-                                                <ArrowRight className="h-4 w-4 ml-2 group-hover/btn:translate-x-1 transition-transform" />
+                                                {completedSteps.length === 4 ? "LEGAL VERIFIED ✅" : "VERIFY & ONBOARD"}
+                                                <ArrowRight className="h-3.5 w-3.5 ml-2 group-hover/btn:translate-x-1 transition-transform" />
                                             </Button>
                                         </div>
                                     </div>
@@ -248,11 +248,11 @@ const StartupCommunityPage = () => {
                             )}
 
                             {/* Active Communities */}
-                            <section className="space-y-8">
+                            <section className="space-y-6">
                                 <div className="flex items-center justify-between px-2">
-                                    <h2 className="text-3xl font-black italic uppercase tracking-tighter text-white">Active Groups</h2>
-                                    <div className="flex items-center gap-2 text-primary font-bold text-xs">
-                                        <div className="w-2 h-2 rounded-full bg-primary animate-ping" />
+                                    <h2 className="text-2xl md:text-3xl font-black italic uppercase tracking-tighter text-white">Active Groups</h2>
+                                    <div className="flex items-center gap-2 text-primary font-bold text-[10px] md:text-xs">
+                                        <div className="w-1.5 h-1.5 md:w-2 md:h-2 rounded-full bg-primary animate-ping" />
                                         {displayCommunities.length} LIVE NOW
                                     </div>
                                 </div>
@@ -267,7 +267,7 @@ const StartupCommunityPage = () => {
                                                 animate={{ opacity: 1, scale: 1 }}
                                                 transition={{ delay: i * 0.1 }}
                                                 whileHover={{ y: -5 }}
-                                                className="p-8 rounded-[2.5rem] bg-slate-900 border border-white/5 hover:border-primary/30 transition-all group overflow-hidden relative"
+                                                className="p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] bg-slate-900 border border-white/5 hover:border-primary/30 transition-all group overflow-hidden relative"
                                             >
                                                 <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${community.color_theme} blur-3xl opacity-50 group-hover:opacity-100 transition-opacity`} />
 
@@ -312,12 +312,12 @@ const StartupCommunityPage = () => {
                         <div className="space-y-8">
 
                             {/* Legal Process Card */}
-                            <div className="p-8 rounded-[2.5rem] bg-[#0B0F1A] border border-white/10 relative overflow-hidden group">
+                            <div className="p-6 md:p-8 rounded-3xl md:rounded-[2.5rem] bg-[#0B0F1A] border border-white/10 relative overflow-hidden group">
                                 <div className="absolute top-0 right-0 p-8 opacity-5">
                                     <Scale className="h-32 w-32" />
                                 </div>
-                                <h3 className="text-xl font-black text-white italic uppercase tracking-tighter mb-6 flex items-center gap-3">
-                                    <ShieldCheck className="h-6 w-6 text-primary" />
+                                <h3 className="text-lg md:text-xl font-black text-white italic uppercase tracking-tighter mb-6 flex items-center gap-3">
+                                    <ShieldCheck className="h-5 w-5 md:h-6 md:w-6 text-primary" />
                                     Legal Process
                                 </h3>
                                 <div className="space-y-6">

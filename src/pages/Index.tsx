@@ -1,10 +1,10 @@
 import { Layout } from "@/components/layout/Layout";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { ArrowRight, Briefcase, GraduationCap, Sparkles, BookOpen, Target, Hammer } from "lucide-react";
+import { ArrowRight, Briefcase, GraduationCap, Sparkles, Target, Hammer, PlayCircle } from "lucide-react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
-import { CoursesSection } from "@/components/home/CoursesSection";
+import { LearningHubSection } from "@/components/home/LearningHubSection";
 import { CareerTracksSection } from "@/components/home/CareerTracksSection";
 import { ProjectsSection } from "@/components/home/ProjectsSection";
 import { useAuth } from "@/hooks/useAuth";
@@ -14,7 +14,7 @@ import { cn } from "@/lib/utils";
 const Index = () => {
   const navigate = useNavigate();
   const { user } = useAuth();
-  const [activeTab, setActiveTab] = useState("courses");
+  const [activeTab, setActiveTab] = useState("learning");
 
   const scrollToSection = useCallback((sectionId: string) => {
     const element = document.getElementById(sectionId);
@@ -25,7 +25,7 @@ const Index = () => {
 
   const getTabColor = (tab: string) => {
     switch (tab) {
-      case 'courses': return 'bg-primary';
+      case 'learning': return 'bg-primary';
       case 'tracks': return 'bg-orange-500';
       case 'projects': return 'bg-emerald-600';
       default: return 'bg-primary';
@@ -34,7 +34,7 @@ const Index = () => {
 
   const getTabShadow = (tab: string) => {
     switch (tab) {
-      case 'courses': return 'shadow-primary/40';
+      case 'learning': return 'shadow-primary/40';
       case 'tracks': return 'shadow-orange-500/40';
       case 'projects': return 'shadow-emerald-600/40';
       default: return 'shadow-primary/40';
@@ -63,8 +63,8 @@ const Index = () => {
               <span className="gradient-text">Pune</span>
             </h1>
 
-            <p className="text-lg md:text-xl text-muted-foreground max-w-2xl mx-auto mb-10 leading-relaxed">
-              Pune's learning-first career platform. Find the best startup roles and internships in Pune with skill-based hiring.
+            <p className="text-base md:text-lg text-muted-foreground max-w-xl mx-auto mb-10 leading-relaxed font-medium">
+              Master skills and unlock elite startup roles with skill-based hiring.
             </p>
 
             <div className="flex flex-row gap-3 justify-center px-4">
@@ -73,8 +73,8 @@ const Index = () => {
                 className="flex-1 max-w-[160px] bg-primary text-primary-foreground hover:bg-primary/90 text-[10px] md:text-sm px-2 md:px-4 py-3 group h-auto rounded-xl"
                 onClick={() => navigate('/learning')}
               >
-                <BookOpen className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 flex-shrink-0" />
-                <span className="whitespace-nowrap">Video Hub</span>
+                <PlayCircle className="h-3.5 w-3.5 md:h-4 md:w-4 mr-1 flex-shrink-0" />
+                <span className="whitespace-nowrap">Skills Hub</span>
               </Button>
 
               <Button
@@ -99,7 +99,7 @@ const Index = () => {
             <p className="text-muted-foreground text-sm">Multiple paths, one destination: getting hired.</p>
           </div>
 
-          <Tabs defaultValue="courses" onValueChange={setActiveTab} className="w-full relative">
+          <Tabs defaultValue="learning" onValueChange={setActiveTab} className="w-full relative">
             {/* Dynamic Background Glow - Simplified to Cyan */}
             <div className={cn(
               "absolute inset-0 -z-10 blur-[100px] opacity-10 transition-all duration-700 rounded-full bg-[#00D1FF]"
@@ -108,7 +108,7 @@ const Index = () => {
             <div className="flex justify-center mb-10">
               <TabsList className="grid grid-cols-3 w-full max-w-xl bg-slate-100 dark:bg-slate-900/50 p-1 rounded-full border border-border/40 backdrop-blur-md self-center h-auto items-stretch">
                 {[
-                  { value: "courses", label: "COURSES", icon: BookOpen, activeColor: "data-[state=active]:!bg-[#00D1FF]" },
+                  { value: "learning", label: "SKILLS", icon: PlayCircle, activeColor: "data-[state=active]:!bg-[#00D1FF]" },
                   { value: "tracks", label: "TRACKS", icon: Target, activeColor: "data-[state=active]:!bg-[#F97316]" },
                   { value: "projects", label: "PROJECTS", icon: Hammer, activeColor: "data-[state=active]:!bg-[#10B981]" },
                 ].map((tab) => (
@@ -136,7 +136,7 @@ const Index = () => {
               transition={{ duration: 0.3 }}
               onPanEnd={(_, info) => {
                 const swipeThreshold = 50;
-                const tabs = ["courses", "tracks", "projects"];
+                const tabs = ["learning", "tracks", "projects"];
                 const currentIndex = tabs.indexOf(activeTab);
 
                 // Detect horizontal swipe with threshold, and ensure it's mostly horizontal
@@ -152,8 +152,8 @@ const Index = () => {
               }}
               className="touch-pan-y"
             >
-              <TabsContent value="courses" className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
-                <CoursesSection />
+              <TabsContent value="learning" className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
+                <LearningHubSection />
               </TabsContent>
 
               <TabsContent value="tracks" className="mt-0 ring-offset-background focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2">
@@ -262,7 +262,7 @@ const Index = () => {
                 <Button
                   size="lg"
                   className="bg-primary text-primary-foreground hover:bg-primary/90 group"
-                  onClick={() => scrollToSection('courses-section')}
+                  onClick={() => scrollToSection('learning-hub-section')}
                 >
                   Start Learning Now
                   <ArrowRight className="ml-2 h-5 w-5 group-hover:translate-x-1 transition-transform" />
