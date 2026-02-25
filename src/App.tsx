@@ -51,6 +51,11 @@ const CareerOS = lazy(() => import("@/pages/admin/CareerOS"));
 const JobManagement = lazy(() => import("@/pages/admin/JobManagement"));
 const InternshipControl = lazy(() => import("@/pages/admin/InternshipControl"));
 const SystemSettings = lazy(() => import("@/pages/admin/SystemSettings"));
+const ProjectEngine = lazy(() => import("@/pages/admin/ProjectEngine"));
+const CertificateEngine = lazy(() => import("@/pages/admin/CertificateEngine"));
+const AIEngine = lazy(() => import("@/pages/admin/AIEngine"));
+const Analytics = lazy(() => import("@/pages/admin/Analytics"));
+const Payments = lazy(() => import("@/pages/admin/Payments"));
 
 const VideoHub = lazy(() => import("@/pages/learning/VideoHub"));
 const CategoryDetail = lazy(() => import("@/pages/learning/CategoryDetail"));
@@ -157,6 +162,46 @@ const App = () => (
                 element={
                   <AdminRoute>
                     <SystemSettings />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/projects"
+                element={
+                  <AdminRoute>
+                    <ProjectEngine />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/certificates"
+                element={
+                  <AdminRoute>
+                    <CertificateEngine />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/ai-engine"
+                element={
+                  <AdminRoute>
+                    <AIEngine />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/analytics"
+                element={
+                  <AdminRoute>
+                    <Analytics />
+                  </AdminRoute>
+                }
+              />
+              <Route
+                path="/admin/payments"
+                element={
+                  <AdminRoute>
+                    <Payments />
                   </AdminRoute>
                 }
               />

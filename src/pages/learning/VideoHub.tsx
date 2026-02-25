@@ -19,7 +19,7 @@ const iconMap: Record<string, any> = {
 const VideoHub = () => {
     return (
         <Layout>
-            <div className="max-w-4xl mx-auto pb-24 px-4">
+            <div className="max-w-6xl mx-auto pb-24 px-4">
 
                 {/* Section 1: Page Title */}
                 <header className="pt-10 pb-6 text-center space-y-3">
@@ -56,7 +56,7 @@ const VideoHub = () => {
                 </div>
 
                 {/* Section 4: Vibrant 2-Column Category Grid */}
-                <div className="grid grid-cols-2 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                     {MOCK_VIDEO_CATEGORIES.map((cat, i) => {
                         const Icon = iconMap[cat.icon] || PlayCircle;
                         return (

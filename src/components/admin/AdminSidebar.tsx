@@ -12,12 +12,17 @@ import {
     LogOut,
     ShieldCheck,
     Sun,
-    Moon
+    Moon,
+    FolderGit2,
+    Award,
+    Bot,
+    BarChart2,
+    CreditCard
 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/useAuth";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 
 interface AdminSidebarProps {
     collapsed: boolean;
@@ -26,19 +31,61 @@ interface AdminSidebarProps {
     setIsDark: (val: boolean) => void;
 }
 
-export function AdminSidebar({ collapsed, setCollapsed, isDark, setIsDark }: AdminSidebarProps) {
-    const location = useLocation();
-    const { signOut, role } = useAuth();
+const coreItems = [
+    { icon: LayoutDashboard, label: "Mission Control", path: "/admin" },
+    { icon: Users, label: "User Intelligence", path: "/admin/users" },
+    { icon: BookOpen, label: "Learning Governance", path: "/admin/learning" },
+    { icon: Target, label: "Career OS", path: "/admin/career-paths" },
+    { icon: Briefcase, label: "Job & Talent", path: "/admin/jobs" },
+    { icon: GraduationCap, label: "Internship Control", path: "/admin/internships" },
+    { icon: Settings, label: "System Brain", path: "/admin/settings" },
+];
 
-    const menuItems = [
-        { icon: LayoutDashboard, label: "Mission Control", path: "/admin" },
-        { icon: Users, label: "User Intelligence", path: "/admin/users" },
-        { icon: BookOpen, label: "Learning Governance", path: "/admin/learning" },
-        { icon: Target, label: "Career OS", path: "/admin/career-paths" },
-        { icon: Briefcase, label: "Job & Talent", path: "/admin/jobs" },
-        { icon: GraduationCap, label: "Internship Control", path: "/admin/internships" },
-        { icon: Settings, label: "System Brain", path: "/admin/settings" },
-    ];
+const intelligenceItems = [
+    { icon: FolderGit2, label: "Project Engine", path: "/admin/projects" },
+    { icon: Award, label: "Certificate Engine", path: "/admin/certificates" },
+    { icon: Bot, label: "AI Engine", path: "/admin/ai-engine", badge: "NEW" },
+    { icon: BarChart2, label: "Analytics", path: "/admin/analytics" },
+    { icon: CreditCard, label: "Payments", path: "/admin/payments", badge: "SOON" },
+];
+
+function NavItem({ item, collapsed }: { item: typeof coreItems[0] & { badge?: string }, collapsed: boolean }) {
+    const location = useLocation();
+    const isActive = location.pathname === item.path;
+    return (
+        <Link
+            to={item.path}
+            className={cn(
+                "flex items-center gap-3 px-3.5 py-3 rounded-2xl transition-all duration-300 group relative",
+                isActive
+                    ? "bg-primary/5 dark:bg-white/[0.03] text-primary"
+                    : "text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/[0.02]"
+            )}
+        >
+            {isActive && (
+                <motion.div
+                    layoutId="sidebar-active"
+                    className="absolute left-0 w-1 h-5 bg-primary rounded-full"
+                />
+            )}
+            <item.icon className={cn(
+                "h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110",
+                isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground dark:group-hover:text-white"
+            )} />
+            {!collapsed && (
+                <div className="flex items-center gap-2 flex-1">
+                    <span className="text-xs font-bold tracking-tight">{item.label}</span>
+                    {'badge' in item && item.badge && (
+                        <span className="text-[8px] font-black uppercase tracking-widest px-1.5 py-0.5 rounded-full bg-primary/10 text-primary">{item.badge}</span>
+                    )}
+                </div>
+            )}
+        </Link>
+    );
+}
+
+export function AdminSidebar({ collapsed, setCollapsed, isDark, setIsDark }: AdminSidebarProps) {
+    const { signOut, role } = useAuth();
 
     return (
         <div
@@ -58,7 +105,7 @@ export function AdminSidebar({ collapsed, setCollapsed, isDark, setIsDark }: Adm
                         animate={{ opacity: 1, x: 0 }}
                         className="flex flex-col"
                     >
-                        <span className="font-black text-lg tracking-tighter text-foreground dark:text-white italic leading-none uppercase">FUTORA<span className="text-primary/60 not-italic ml-1 font-bold tracking-normal text-xs">OS</span></span>
+                        <span className="font-black text-lg tracking-tighter text-foreground dark:text-white italic leading-none uppercase">FUTURA<span className="text-primary/60 not-italic ml-1 font-bold tracking-normal text-xs">OS</span></span>
                         <span className="text-[9px] text-muted-foreground uppercase tracking-[0.2em] font-black mt-1.5">
                             {typeof role === 'string' ? role.replace('_', ' ') : 'VERIFYING IDENTITY'}
                         </span>
@@ -66,39 +113,20 @@ export function AdminSidebar({ collapsed, setCollapsed, isDark, setIsDark }: Adm
                 )}
             </div>
 
-            {/* Navigation Section */}
-            <div className="flex-1 px-4 mt-8 space-y-8 overflow-y-auto scrollbar-none">
-                <div className="space-y-1.5">
-                    {!collapsed && <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] px-3 mb-4">Core Governance</p>}
-                    {menuItems.map((item) => {
-                        const isActive = location.pathname === item.path;
-                        return (
-                            <Link
-                                key={item.path}
-                                to={item.path}
-                                className={cn(
-                                    "flex items-center gap-3 px-3.5 py-3 rounded-2xl transition-all duration-300 group relative",
-                                    isActive
-                                        ? "bg-primary/5 dark:bg-white/[0.03] text-primary"
-                                        : "text-muted-foreground hover:text-foreground dark:hover:text-white hover:bg-muted dark:hover:bg-white/[0.02]"
-                                )}
-                            >
-                                {isActive && (
-                                    <motion.div
-                                        layoutId="sidebar-active"
-                                        className="absolute left-0 w-1 h-5 bg-primary rounded-full"
-                                    />
-                                )}
-                                <item.icon className={cn(
-                                    "h-5 w-5 shrink-0 transition-transform duration-300 group-hover:scale-110",
-                                    isActive ? "text-primary" : "text-muted-foreground group-hover:text-foreground dark:group-hover:text-white"
-                                )} />
-                                {!collapsed && (
-                                    <span className="text-xs font-bold tracking-tight">{item.label}</span>
-                                )}
-                            </Link>
-                        );
-                    })}
+            {/* Navigation */}
+            <div className="flex-1 px-4 mt-4 space-y-6 overflow-y-auto scrollbar-none pb-4">
+                <div className="space-y-1">
+                    {!collapsed && <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em] px-3 mb-3">Core Governance</p>}
+                    {coreItems.map((item) => <NavItem key={item.path} item={item} collapsed={collapsed} />)}
+                </div>
+                <div className="space-y-1">
+                    {!collapsed && (
+                        <div className="flex items-center gap-2 px-3 mb-3">
+                            <p className="text-[10px] font-black text-muted-foreground uppercase tracking-[0.3em]">Intelligence Layer</p>
+                            <div className="flex-1 h-px bg-border" />
+                        </div>
+                    )}
+                    {intelligenceItems.map((item) => <NavItem key={item.path} item={item} collapsed={collapsed} />)}
                 </div>
             </div>
 

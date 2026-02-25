@@ -26,7 +26,7 @@ const CategoryDetail = () => {
 
     return (
         <Layout>
-            <div className="max-w-2xl mx-auto pb-24 px-4">
+            <div className="max-w-6xl mx-auto pb-24 px-4">
 
                 {/* Back Link */}
                 <div className="pt-8 pb-4">
@@ -65,7 +65,7 @@ const CategoryDetail = () => {
                 </div>
 
                 {/* Section 3: Vibrant 2-Column Sub-category Grid */}
-                <div className="grid grid-cols-2 gap-4 md:gap-6">
+                <div className="grid grid-cols-2 lg:grid-cols-5 gap-4 md:gap-6">
                     {(category.subcategories || []).map((sub, i) => (
                         <motion.div
                             key={sub.id}
