@@ -24,28 +24,13 @@ const AdminLogin = () => {
         }
     }, [isAdmin, authLoading, navigate]);
 
-    // Real-time Admin Identity Scanning
+    // Visual identity scan — just checks email format is valid.
+    // Real admin role verification happens post-login in handleAdminLogin.
     useEffect(() => {
-        const checkAdminIdentity = async () => {
-            if (email.length < 5 || !email.includes('@')) {
-                setIsVerified(false);
-                return;
-            }
-
-            const { data, error } = await supabase
-                .from('profiles')
-                .select('role')
-                .eq('email', email)
-                .single();
-
-            if (!error && data && ['super_admin', 'content_admin', 'hiring_admin'].includes(data.role)) {
-                setIsVerified(true);
-            } else {
-                setIsVerified(false);
-            }
-        };
-
-        const timer = setTimeout(checkAdminIdentity, 500);
+        const timer = setTimeout(() => {
+            const isValidEmail = email.length >= 5 && email.includes('@') && email.includes('.');
+            setIsVerified(isValidEmail);
+        }, 400);
         return () => clearTimeout(timer);
     }, [email]);
 
@@ -71,7 +56,7 @@ const AdminLogin = () => {
             .eq('user_id', authData.user.id)
             .single();
 
-        if (!profile || !['super_admin', 'content_admin', 'hiring_admin'].includes(profile.role)) {
+        if (!profile || !['super_admin', 'curriculum_admin', 'hiring_admin', 'support_admin'].includes(profile.role)) {
             toast.error("Unauthorized. Admin access revoked for this session.");
             await supabase.auth.signOut();
             setLoading(false);
